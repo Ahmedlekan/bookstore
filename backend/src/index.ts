@@ -36,7 +36,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Welcome to the server!");
 });
 app.use("/api/user", userRoutes)
-app.use("api/books", bookRoutes)
+app.use("/api/books", bookRoutes)
 
 app.listen(7000, ()=>{
     console.log("Server running on localhost:7000")

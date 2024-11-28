@@ -29,7 +29,13 @@ router.post("/create-book", upload.array("imageFiles", 6),
             return
         }
 
-        const newBook: BookType  = req.body 
+        // Parse the categories field back to an array
+        const categories = JSON.parse(req.body.categories || '[]');
+
+        const newBook: BookType  = {
+            ...req.body,
+            categories
+        }
 
         // uploading the image to cloudinary
         const imageUrls = await uploadImages(imageFiles)
@@ -63,12 +69,14 @@ router.get("/", async (req: Request, res: Response) => {
 // For fetching a book and its details
 router.get("/:id", async(req: Request, res: Response)=>{
     try {
-        const {id} = req.params;
-        const book =  await Book.findById(id);
+        
+        const id = req.params.id.toString()
+        
+        const book =  await Book.findOne({id});
         if(!book){
             res.status(404).send({message: "Book not Found!"})
         }
-        res.status(200).send(book)
+        res.json(book)
         
     } catch (error) {
         console.error("Error fetching book", error);
@@ -77,7 +85,7 @@ router.get("/:id", async(req: Request, res: Response)=>{
 })
 
 // For editing a book and its images
-router.put("/:id", verifyToken, upload.array("imageFiles"), async(req:Request, res:Response)=>{
+router.put("/:id", upload.array("imageFiles"), async(req:Request, res:Response)=>{
     
     try {
         // Extract book ID from the URL
@@ -92,7 +100,11 @@ router.put("/:id", verifyToken, upload.array("imageFiles"), async(req:Request, r
         }
 
         // Extract the updated book fields from the request body (excluding images)
-        const { imageUrls, ...updatedBookData } = req.body;
+        const { imageUrls, categories, ...updatedBookData } = req.body;
+
+        if (categories && typeof categories === "string") {
+            updatedBookData.categories = JSON.parse(categories);
+        }
 
         // Update the fields in the book object
         Object.assign(book, updatedBookData);
@@ -109,8 +121,12 @@ router.put("/:id", verifyToken, upload.array("imageFiles"), async(req:Request, r
         // Merge the new image URLs with the existing ones
         book.imageUrls = [...updatedImageUrls, ...(imageUrls || book.imageUrls)];
 
+        console.log("Parsed Categories:", updatedBookData.categories);
+        console.log("Updated Book Data (After Parsing):", updatedBookData);
+        console.log("Files Uploaded:", req.files);
+
         await book.save()
-        res.status(201).json(book)
+        res.status(200).json(book)
 
     } catch (error) {
         res.status(500).json({message: "Something went wrong"})
@@ -119,11 +135,14 @@ router.put("/:id", verifyToken, upload.array("imageFiles"), async(req:Request, r
 
 
 // For deleting a book 
-router.delete("/:id", verifyToken, async(req: Request, res:Response)=>{
+router.delete("/:id", async(req: Request, res:Response)=>{
     
     try {
+        
         const {id} = req.params
+        
         const deletedBook = await Book.findByIdAndDelete(id)
+        
         if(!deletedBook) {
             res.status(404).send({message: "Book is not Found!"})
         }
