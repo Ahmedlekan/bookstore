@@ -29,33 +29,46 @@ const RenderInputComponents = () => {
           name="title"
           placeholder="Enter book title"
           register={register}
-        />
-
-        {/* Reusable Textarea for Description */}
-        <InputField
-          label="Description"
-          name="description"
-          placeholder="Enter book description"
-          type="textarea"
+      />
+      
+      <InputField
+          label="Author"
+          name="author"
+          placeholder="Enter Author's Name"
           register={register}
+      />
 
-        />
+      {/* Reusable Textarea for Description */}
+      <InputField
+        label="Description"
+        name="description"
+        placeholder="Enter book description"
+        type="textarea"
+        register={register}
+      />
 
       {/* Reusable Select Field for Category */}
         <SelectField
             label="Category"
             name="categories"
             options={[
-            { value: '', label: 'Choose A Category' },
-            { value: 'history', label: 'History' },
-            { value: 'romance', label: 'Romance' },
-            { value: 'fiction', label: 'Fiction' },
-            { value: 'fantasy', label: 'Fantasy' },
-            { value: 'cook book', label: 'Cook Book' },
+            { value: '', label: 'Choose a category' },
+            { value: 'History', label: 'History' },
+            { value: 'Romance', label: 'Romance' },
+            { value: 'Fantasy', label: 'Fantasy' },
+            { value: 'Cook Book', label: 'Cook Book' },
             // Add more options as needed
             ]}
             register={register}
         />
+
+      <InputField
+        label="Publisher"
+        name="publisher"
+        placeholder="Enter book publisher"
+        register={register}
+
+      />
       
       {/* Trending Checkbox */}
       <div className="mb-4">

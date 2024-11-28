@@ -1,36 +1,43 @@
-import RenderInputComponents from './RenderInputComponents';
+import { BookType } from '../../../../backend/src/types/types'
+import RenderInputComponents from '../../common/RenderInputComponents'
+import BookImageUpload from '../../common/BookImageUpload'
 import { useForm, FormProvider } from 'react-hook-form';
-import BookImageUpload from "./BookImageUpload";
 import { CgClose } from "react-icons/cg";
-import { BookCategory } from '../../../backend/src/types/types';
+import { initialFormDataProps } from '../../common/form';
+import * as adminApiClient from "../../apiClient/admin"
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAppContext } from '../../context/useAppContext';
 
-export type initialFormDataProps = {
-    _id?: string;
-    title: string;
-    author: string;
-    publisher: string;
-    description: string;
-    sku: string;
-    categories: BookCategory[];
-    imageUrls: string[]; 
-    imageFiles: FileList;
-    oldPrice: number;
-    newPrice: number;
-    trending: boolean;
-};
-
-
-type CommonFormProps = {
-    onSave: (productFormData: FormData) => void;
-    isLoading: boolean;
-    onClose?: ()=> void
+type AdminEditBookProps = {
+    bookData: BookType
+    onClose:()=> void
 }
 
-function CommonForm({onSave, isLoading, onClose}: CommonFormProps) {
+const AdminEditBook = ({bookData, onClose}: AdminEditBookProps) => {
+    const {showToast} = useAppContext()
+    const queryClient = useQueryClient()
 
-    const formMethods = useForm<initialFormDataProps>()
-    
+    const formMethods = useForm<initialFormDataProps>({
+        defaultValues: bookData
+    })
     const {handleSubmit} = formMethods
+
+    const {mutate, isPending: isLoading} = useMutation({
+        mutationFn: adminApiClient.updateBookById,
+        onSuccess: async(data)=>{
+            console.log("Book updated successfully:", data);
+            showToast({ message: "Book Updated!", type: "SUCCESS" });
+            queryClient.invalidateQueries()
+        },
+        onError: async(error)=>{
+            console.error("Mutation failed:", error);
+        showToast({ message: error.message || "Book failed to update!", type: "ERROR" });
+        }
+    })
+
+    const onSave = (bookFormData: FormData)=>{
+        mutate(bookFormData)
+    }
 
     const onSubmit = handleSubmit((formDataJson: initialFormDataProps) => {
       const formData = new FormData();
@@ -65,10 +72,19 @@ function CommonForm({onSave, isLoading, onClose}: CommonFormProps) {
   
       // Append trending flag
       formData.append("trending", formDataJson.trending.toString());
+
+      // **Append the product ID**
+      if (formDataJson._id) {
+        formData.append("bookId", formDataJson._id);
+        } else {
+            showToast({ message: "Book ID is missing", type: "ERROR" });
+            return;
+        }
   
       // Call the `onSave` handler with the prepared FormData
       onSave(formData);
   });
+
 
   return (
     <FormProvider {...formMethods}>
@@ -81,7 +97,7 @@ function CommonForm({onSave, isLoading, onClose}: CommonFormProps) {
         >
 
           <div className='flex justify-between items-center pb-3'>
-            <h2 className='font-bold text-lg'>Upload Book</h2>
+            <h2 className='font-bold text-lg'>Edit Book</h2>
             <div className='w-fit ml-auto text-2xl hover:text-red-600
                 cursor-pointer' onClick={onClose}>
                 <CgClose/>
@@ -103,7 +119,7 @@ function CommonForm({onSave, isLoading, onClose}: CommonFormProps) {
       </div>
     
     </FormProvider>
-  );
+  )
 }
 
-export default CommonForm;
+export default AdminEditBook

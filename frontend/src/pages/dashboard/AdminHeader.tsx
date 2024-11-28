@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Link, Outlet } from 'react-router-dom';
 import {useState} from 'react'
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import CommonForm from '../../common/form';
 import { useAppContext } from '../../context/useAppContext';
 import * as adminApiclient from "../../apiClient/admin"
@@ -10,11 +10,13 @@ import * as adminApiclient from "../../apiClient/admin"
 const AdminHeader = () => {
     const {showToast} = useAppContext()
     const navigate = useNavigate()
-    const [openCreateProductsDialog, setOpenCreateProductsDialog] = useState<boolean>(false);
+    const queryClient =  useQueryClient()
+    const [openCreateBooksDialog, setOpenCreateBooksDialog] = useState<boolean>(false);
 
     const {mutate, isPending} = useMutation({
         mutationFn: adminApiclient.addBook,
         onSuccess: async()=>{ 
+            queryClient.invalidateQueries()
             showToast({ message: "Book Saved!", type: "SUCCESS" });
         },
         onError: (error)=>{
@@ -173,7 +175,7 @@ const AdminHeader = () => {
                     <button className="inline-flex px-5 py-3 text-white 
                         bg-deepbrown hover:bg-pink-300 
                         focus:bg-deepbrown rounded-md ml-6 mb-3"
-                        onClick={()=>setOpenCreateProductsDialog(true)}
+                        onClick={()=>setOpenCreateBooksDialog(true)}
                     >
                         <svg aria-hidden="true" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor" 
@@ -193,16 +195,13 @@ const AdminHeader = () => {
             <Outlet/>
         </main>
 
-
-
-
         {/**upload product component */}
         {
-          openCreateProductsDialog && (
+          openCreateBooksDialog && (
             <CommonForm 
               isLoading={isPending} 
               onSave={handleSave} 
-              onClose={()=>setOpenCreateProductsDialog(false)}/>
+              onClose={()=>setOpenCreateBooksDialog(false)}/>
           )
         }
     </div>

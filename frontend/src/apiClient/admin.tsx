@@ -32,7 +32,7 @@ export const allBooks = async(): Promise<BookType[]>=>{
 
 //fetch a single book and its details
 export const fetchBookById = async(bookId: string): Promise<BookType>=>{
-    const response = await fetch(`${API_BASE_URL}/api/books$/${bookId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/books/${bookId}`, {
         credentials: "include"
     })
 
@@ -50,15 +50,22 @@ export const updateBookById = async(bookFormData: FormData)=>{
     if(!bookId){
         throw new Error("Book ID is required");
     }
-    const response = await fetch(`API_BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/books/${bookId}`, {
         method:"PUT",
         body: bookFormData,
         credentials:"include"
     })
-    if(!response.ok){
-        throw new Error("Book not updated");
+
+    console.log("Response Status:", response.status);
+    console.log("Response Body:", await response.text());
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update the book.");
     }
-    return response.json()
+
+    return response;
+
 }
 
 //for deleting a book

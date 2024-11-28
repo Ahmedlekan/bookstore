@@ -1,11 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { addToCart } from '../../store/cart/cartSlice';
-import { BookProps } from '../../../../backend/src/types/types';
 
 interface BookCardProps {
-  book: BookProps;
-  onQuickView: (book: BookProps) => void; // Function to handle Quick View
+  book: any;
+  onQuickView: (book: any) => void; // Function to handle Quick View
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, onQuickView }) => {
