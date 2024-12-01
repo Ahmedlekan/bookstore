@@ -1,104 +1,11 @@
-import { FiSearch, FiShoppingBag, FiLogIn } from "react-icons/fi";
+import { FiSearch, FiShoppingBag} from "react-icons/fi";
 import { HiOutlineUser } from "react-icons/hi";
 import { useState } from "react";
 import book1 from "../../assets/book1.jpg"
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/avatar.png"
-
-interface MenuItem {
-    label: string;
-    link?: string;
-    subItems?: SubMenuItem[];
-    isMegaMenu?: boolean;
-    categories?: MegaMenuCategory[];
-  }
-  
-  interface SubMenuItem {
-    label: string;
-    link: string;
-  }
-  
-  interface MegaMenuCategory {
-    title: string;
-    items: SubMenuItem[];
-  }
-
-const menuItems: MenuItem[] = [
-    {
-      label: 'HOME',
-      subItems: [
-        { label: 'Home 1', link: '#' },
-        { label: 'Home 2', link: '#' },
-        { label: 'Home 3', link: '#' }
-      ]
-    },
-    {
-      label: 'MEGA MENU',
-      isMegaMenu: true,
-      categories: [
-        {
-          title: 'TEXT BOOKS',
-          items: [
-            { label: 'Business', link: '#' },
-            { label: 'Encyclodepedias', link: '#' },
-            { label: 'Lifestyle', link: '#' },
-            { label: 'Foods & Cookery', link: '#' },
-            { label: 'Fantasy', link: '#' }
-          ]
-        },
-        {
-          title: 'KINDLE BOOKS',
-          items: [
-            { label: 'Architecture', link: '#' },
-            { label: 'Biography', link: '#' },
-            { label: 'Music', link: '#' },
-            { label: 'Wildlife', link: '#' },
-            { label: 'Cooking', link: '#' }
-          ]
-        },
-        {
-          title: 'PAGES',
-          items: [
-            { label: 'About Us', link: '#' },
-            { label: 'Contact Us', link: '#' },
-            { label: 'Privacy Policy', link: '#' },
-            { label: 'Return & Refunds Policy', link: '#' },
-            { label: 'Terms & Condition', link: '#' }
-          ]
-        }
-      ]
-    },
-    {
-      label: 'SHOP',
-      subItems: [
-        { label: 'Simple product', link: '#' },
-        { label: 'Read PDF Book Demo', link: '#' },
-        { label: 'External Product', link: '#' },
-        { label: 'Free Download Books', link: '#' },
-        { label: 'Bundles Books', link: '#' }
-      ]
-    },
-    {
-      label: 'PAGES',
-      subItems: [
-        { label: 'About Ud', link: '#' },
-        { label: 'Author Profile Page', link: '#' },
-        { label: 'Publisher Profile Page', link: '#' },
-        { label: 'All Authors Page', link: '#' },
-        { label: 'All Book Publishers', link: '#' }
-      ]
-    },
-    {
-      label: 'CONTACT US',
-      link: '#'
-    }
-  ];
-
-  const navigation = [
-    {name: "Dashboard", href:"/user-dashboard"},
-    {name: "Orders", href:"/orders"},
-    {name: "Check Out", href:"/checkout"},
-]
+import { menuItems } from "../../constants/data";
+import { navigation } from "../../constants/data";
 
 
 const Navbar = () => {
@@ -137,12 +44,12 @@ const Navbar = () => {
             onMouseEnter={() => setActiveMenu(item.label)}
             onMouseLeave={() => setActiveMenu(null)}
           >
-            <button className="flex items-center text-lg font-display
-                font-semibold space-x-1"
+            <Link to={item.link || "#"} className="flex items-center text-lg font-display
+              font-semibold space-x-1"
             >
               {item.label} 
               {item.subItems || item.isMegaMenu ? <span className="text-xl">&#9662;</span> : null}
-            </button>
+            </Link>
             
             {/* Dropdown/Mega Menu */}
             {(item.subItems || item.isMegaMenu) && activeMenu === item.label && (
@@ -161,11 +68,10 @@ const Navbar = () => {
                         <ul className="space-y-5 text-start">
                           {category.items.map((subItem, subIndex) => (
                             <li key={subIndex}>
-                              <a href={subItem.link} className="text-gray-600
+                              <Link to={subItem.link} className="text-gray-600
                                 hover:underline font-body hover:bg-gray-100 px-4 py-2">
                                 {subItem.label}
-                              </a>
-                              <div className=""></div>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -181,14 +87,14 @@ const Navbar = () => {
                   </div>
                 ) : (
                   item.subItems?.map((subItem, subIndex) => (
-                    <a 
+                    <Link 
                       key={subIndex} 
-                      href={subItem.link} 
+                      to={subItem.link} 
                       className="block text-nowrap px-4 py-2 
                         hover:bg-gray-100 text-gray-600 font-body hover:underline"
                     >
                       {subItem.label}
-                    </a>
+                    </Link>
                   ))
                 )}
               </div>

@@ -5,11 +5,11 @@ import { Outlet } from "react-router-dom"
 
 const Layout = () => {
   return (
-    <div className="">
+    <div className="container mx-auto">
         <NavbarTop />
         <Navbar />
         
-        <div>
+        <div className=" flex-grow container mx-auto pt-4 pb-20">
           <Outlet />
         </div>
         

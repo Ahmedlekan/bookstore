@@ -1,12 +1,29 @@
 import BookCard from "../ui/BookCard"
-import { books } from "../../constants/data"
 import { useState } from "react"
 import Modal from "../ui/Modal"
+import { BookType } from "../../../../backend/src/types/types"
+import { useQuery } from "@tanstack/react-query"
+import * as generalApiclient from "../../apiClient/general"
+import Loading from "../ui/Loading"
 
 const Deals = () => {
+    const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
+
+    const {data: books = [], isLoading, isError} = useQuery({
+        queryKey: ["fetchAllBooks"],
+        queryFn: generalApiclient.fetchAllBooks
+      })
+    
+      if (isLoading) {
+        return <Loading />;
+      }
+      
+      if (isError) {
+        return <div>Error fetching books</div>;
+      }
+
     const booksSlice = books.slice(0, 4)
 
-    const [selectedBook, setSelectedBook] = useState<any | null>(null);
 
   return (
     <div className=" bg-gray-50 min-h-screen pt-10 md:pt-20 pb-10 px-5">
@@ -23,7 +40,7 @@ const Deals = () => {
         >
             {booksSlice.map(book => (
             <BookCard 
-                key={book.id} 
+                key={book._id} 
                 book={book} 
                 onQuickView={setSelectedBook} 
             />

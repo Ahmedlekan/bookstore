@@ -21,7 +21,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ image, author, date, title, descrip
           <p>{date}</p>
         </div>
         <h3 className="text-xl font-display font-semibold text-gray-800 mb-3">{title}</h3>
-        <p className="text-gray-600 mb-4 font-body">{description}</p>
+        <p className="text-gray-600 mb-4 line-clamp-3 font-body">{description}</p>
         <button className="bg-black font-semibold font-body text-white
           px-4 py-2 rounded-md hover:bg-black/80 transition">
           Read More

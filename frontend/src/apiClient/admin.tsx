@@ -4,7 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""
 
 // add a book 
 export const addBook = async(bookFormData: FormData)=>{
-    const response = await fetch(`${API_BASE_URL}/api/books/create-book`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/create-book`, {
         credentials:"include",
         method: "POST",
         body: bookFormData
@@ -19,7 +19,7 @@ export const addBook = async(bookFormData: FormData)=>{
 
 //fetch all books
 export const allBooks = async(): Promise<BookType[]>=>{
-    const response = await fetch(`${API_BASE_URL}/api/books`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin`, {
         credentials: "include"
     })
 
@@ -32,7 +32,7 @@ export const allBooks = async(): Promise<BookType[]>=>{
 
 //fetch a single book and its details
 export const fetchBookById = async(bookId: string): Promise<BookType>=>{
-    const response = await fetch(`${API_BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/${bookId}`, {
         credentials: "include"
     })
 
@@ -50,7 +50,7 @@ export const updateBookById = async(bookFormData: FormData)=>{
     if(!bookId){
         throw new Error("Book ID is required");
     }
-    const response = await fetch(`${API_BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/${bookId}`, {
         method:"PUT",
         body: bookFormData,
         credentials:"include"
@@ -70,7 +70,7 @@ export const updateBookById = async(bookFormData: FormData)=>{
 
 //for deleting a book
 export const deleteBook = async(bookId: string)=>{
-    const response = await fetch(`${API_BASE_URL}/api/books/${bookId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/${bookId}`, {
         method: "DELETE",
         credentials:"include"
     })

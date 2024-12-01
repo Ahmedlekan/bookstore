@@ -1,16 +1,8 @@
 import React from 'react';
-
-interface Book {
-  image: string;
-  title: string;
-  author: string;
-  category?: string;
-  description?: string;
-  price?: string;
-}
+import { BookType } from '../../../../backend/src/types/types';
 
 interface ModalProps {
-  book: Book | null;
+  book: BookType
   isOpen: boolean;
   onClose: () => void;
 }
@@ -32,7 +24,7 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
             h-64 lg:h-auto overflow-hidden"
           >
             <img
-              src={book.image}
+              src={book.imageUrls?.[0] || ""}
               alt={book.title}
               className="w-full h-full object-cover"
             />
@@ -116,7 +108,7 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
 
             <div className='text-gray-500 font-body'>
               <p>SKU: BKS14957</p>
-              <h2>Category: {book.category}</h2>
+              <h2>Category: {book.categories}</h2>
               <p>Tag: </p>
             </div>
 

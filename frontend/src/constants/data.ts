@@ -10,6 +10,105 @@ import blog1 from "../assets/blog1.jpg"
 import blog2 from "../assets/blog2.jpg"
 import blog3 from "../assets/blog3.jpg"
 
+interface MenuItem {
+  label: string;
+  link?: string;
+  subItems?: SubMenuItem[];
+  isMegaMenu?: boolean;
+  categories?: MegaMenuCategory[];
+}
+
+interface SubMenuItem {
+  label: string;
+  link: string;
+}
+
+interface MegaMenuCategory {
+  title: string;
+  items: SubMenuItem[];
+}
+
+export const menuItems: MenuItem[] = [
+  {
+    label: 'HOME',
+    subItems: [
+      { label: 'Home 1', link: '#' },
+      { label: 'Home 2', link: '#' },
+      { label: 'Home 3', link: '#' }
+    ]
+  },
+  {
+    label: 'MEGA MENU',
+    isMegaMenu: true,
+    categories: [
+      {
+        title: 'TEXT BOOKS',
+        items: [
+          { label: 'Business', link: '#' },
+          { label: 'Encyclodepedias', link: '#' },
+          { label: 'Lifestyle', link: '#' },
+          { label: 'Foods & Cookery', link: '#' },
+          { label: 'Fantasy', link: '#' }
+        ]
+      },
+      {
+        title: 'KINDLE BOOKS',
+        items: [
+          { label: 'Architecture', link: '#' },
+          { label: 'Biography', link: '#' },
+          { label: 'Music', link: '#' },
+          { label: 'Wildlife', link: '#' },
+          { label: 'Cooking', link: '#' }
+        ]
+      },
+      {
+        title: 'PAGES',
+        items: [
+          { label: 'About Us', link: '#' },
+          { label: 'Contact Us', link: '#' },
+          { label: 'Privacy Policy', link: '#' },
+          { label: 'Return & Refunds Policy', link: '#' },
+          { label: 'Terms & Condition', link: '#' }
+        ]
+      }
+    ]
+  },
+  {
+    label: 'SHOP',
+    subItems: [
+      { label: 'Simple product', link: '#' },
+      { label: 'Read PDF Book Demo', link: '#' },
+      { label: 'External Product', link: '#' },
+      { label: 'Free Download Books', link: '#' },
+      { label: 'Bundles Books', link: '#' }
+    ]
+  },
+  {
+    label: 'PAGES',
+    subItems: [
+      { label: 'About Ud', link: '#' },
+      { label: 'Author Profile Page', link: '#' },
+      { label: 'Publisher Profile Page', link: '#' },
+      { label: 'All Authors Page', link: '#' },
+      { label: 'All Book Publishers', link: '#' }
+    ]
+  },
+  {
+    label: 'BOOK STORE',
+    link: '/books-store'
+  },
+  {
+    label: 'CONTACT US',
+    link: '#'
+  }
+];
+
+export const navigation = [
+  {name: "Dashboard", href:"/user-dashboard"},
+  {name: "Orders", href:"/orders"},
+  {name: "Check Out", href:"/checkout"},
+]
+
 
 export const books = [
   // Fantasy
