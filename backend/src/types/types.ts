@@ -20,3 +20,12 @@ export interface UserType {
     password: string;
     role: 'user' | 'admin';
   }
+
+  export type BookFilterResponse = {
+    data: BookType[];
+    pagination: {
+      total: number;
+      page: number;
+      pages: number;
+    };
+  };

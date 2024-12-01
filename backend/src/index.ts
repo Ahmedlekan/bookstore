@@ -4,7 +4,8 @@ import "dotenv/config"
 import cookierParser from "cookie-parser"
 import mongoose from "mongoose"
 import userRoutes from "../src/routes/user"
-import bookRoutes from "./routes/books"
+import adminRoutes from "../src/routes/admin"
+import generalRoutes from "../src/routes/general"
 
 import {v2 as cloudinary} from 'cloudinary';
 
@@ -36,7 +37,8 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Welcome to the server!");
 });
 app.use("/api/user", userRoutes)
-app.use("/api/books", bookRoutes)
+app.use("/api/admin", adminRoutes)
+app.use("/api/general", generalRoutes)
 
 app.listen(7000, ()=>{
     console.log("Server running on localhost:7000")
