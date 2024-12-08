@@ -1,17 +1,39 @@
-import {useState} from 'react'
 import { Link } from 'react-router-dom'
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
+import { RegisterFormDataprops } from '../../apiClient/user';
+import { useAppContext } from '../../context/useAppContext';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import * as userAapiClient from "../../apiClient/user"
 
 
 
 const Register = () => {
-    const [message, setMessage] = useState("");
-    const {register,formState: { errors }} = useForm()
+    const {register, watch, handleSubmit, formState:{errors}} = useForm<RegisterFormDataprops>()
+    const {showToast} = useAppContext()
+    const queryClient = useQueryClient()
+    const navigate = useNavigate()
+
+    const mutation = useMutation({
+        mutationFn: userAapiClient.register,
+        onSuccess: async ()=>{
+            showToast({message:"Registration Success!", type: "SUCCESS"})
+            await queryClient.invalidateQueries({ queryKey: ["validateToken"] })
+            navigate("/")
+        },
+        onError: (error: Error)=>{
+            showToast({message: error.message, type: "ERROR"})
+        }
+    })
+
+    const onSubmit = handleSubmit((data)=>{
+        mutation.mutate(data)
+    })
 
   return (
-    <div className='h-[calc(100vh-120px)] flex justify-center
-        items-center py-10 '
+    <div className='h-[100vh] flex justify-center
+        items-center'
     >
         <div className='w-full max-w-sm mx-auto bg-white
             shadow-md rounded px-8 pt-6 pb-8 mb-4'
@@ -20,48 +42,72 @@ const Register = () => {
                 Please Register
             </h2>
 
-            <form onSubmit={()=>{}}>
-                
-                <div className='mb-4'>
-                    <label className='block text-gray-700 text-sm
-                        font-bold mb-2 font-body' htmlFor="email"
-                    >
-                        Email
-                    </label>
-                    <input 
-                        {...register("email", { required: true })} 
-                        type="email" name="email" id="email" placeholder='Email Address'
-                        className='shadow appearance-none border rounded
-                        w-full py-2 px-3 leading-tight focus:outline-none
-                        focus:shadow font-body'
-                    />
-                </div>
+            <form className="flex flex-col gap-5 font-body" onSubmit={onSubmit}>
+                <label className="text-gray-700 text-sm font-bold">
+                        Username
+                        <input 
+                            className="border rounded w-full py-1 px-2 font-normal"
+                            {...register("username", {required:"This field is required"})}
+                        />
+                        {errors.username && (
+                            <span className="text-red-500">{errors.username.message}</span>
+                        )}
+                </label>
 
-                <div className='mb-4'>
-                    <label className='block text-gray-700 text-sm
-                        font-bold mb-2 font-body' htmlFor="password"
-                    >
-                        Password
-                    </label>
-                    <input 
-                        {...register("password", { required: true })} 
-                        type="password" name="password" id="password" placeholder='Password'
-                        className='shadow appearance-none border rounded
-                        w-full py-2 px-3 leading-tight focus:outline-none
-                        focus:shadow font-body'
+                <label className="text-gray-700 text-sm font-bold">
+                    Email
+                    <input
+                        type="email"
+                        className="border rounded w-full py-1 px-2 font-normal"
+                        {...register("email", {required:"This field is required"})}
                     />
-                </div>
-                {
-                    message && <p className='text-red-500 text-xs italic mb-3'>{message}</p>
-                }
+                    {errors.email && (
+                        <span className="text-red-500">{errors.email.message}</span>
+                    )}
+                </label>
+
+                <label className="text-gray-700 text-sm font-bold">
+                    Password
+                    <input
+                        type="password"
+                        className="border rounded w-full py-1 px-2 font-normal"
+                        {...register("password", {required:"This field is required", minLength:{
+                            value: 6,
+                            message: "Password must be atleast 6 characters"
+                        }})}
+                    />
+                    {errors.password && (
+                        <span className="text-red-500">{errors.password.message}</span>
+                    )}
+                </label>
+                
+                <label className="text-gray-700 text-sm font-bold">
+                    Confirm Password
+                    <input
+                        type="password"
+                        className="border rounded w-full py-1 px-2 font-normal"
+                        {...register("confirmPassword", {
+                            validate:(val)=>{
+                                if(!val){
+                                    return "This field is required"
+                                } else if (watch("password") !== val){
+                                    return "Your passwords do not match"
+                                }
+                            }
+                        })}
+                    />
+                    {errors.confirmPassword && (
+                        <span className="text-red-500">{errors.confirmPassword.message}</span>
+                    )}
+                </label>
+
                 <div>
                     <button className='bg-black hover:bg-black/80 font-body
-                        text-white font-bold py-2 px-8 rounded
-                        focus:outline-none'
-                    >
-                        Register
+                    text-white font-bold py-2 px-8 rounded focus:outline-none'>
+                        Register 
                     </button>
                 </div>
+
             </form>
             
             <p className='align-baseline font-medium mt-4 text-sm font-body'>

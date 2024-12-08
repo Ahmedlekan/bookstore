@@ -1,19 +1,44 @@
 import { FiSearch, FiShoppingBag} from "react-icons/fi";
 import { HiOutlineUser } from "react-icons/hi";
+import { Sheet } from "../ui/Sheet";
 import { useState } from "react";
 import book1 from "../../assets/book1.jpg"
 import { Link } from "react-router-dom";
 import Avatar from "../../assets/avatar.png"
 import { menuItems } from "../../constants/data";
 import { navigation } from "../../constants/data";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import * as authClient from "../../apiClient/auth"
+import { useAppContext } from "../../context/useAppContext";
+import { useCartContext } from "../../context/useCart";
+import Button from "../ui/Button";
+import CartWrapper from "../ui/CartWrapper";
 
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const  [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
-    const [currentUser, setCurrentUser] = useState(false)
+    const [openCartSheet, setOpenCartSheet] = useState(false);
     const [token, setToken] = useState(false)
+    const {showToast, setUser, isLoggedIn} = useAppContext()
+    const {cartItems} = useCartContext()
+    const queryClient = useQueryClient()
+
+    const mutation = useMutation({
+      mutationFn: authClient.signOut,
+      onSuccess: async ()=>{
+          await queryClient.invalidateQueries({queryKey: ["validateToken"]});
+          setUser(null)
+          showToast({ message: "Signed Out!", type: "SUCCESS" });
+      },
+      onError: (error: Error) => {
+          showToast({ message: error.message, type: "ERROR" });
+        },
+  })
+
+  const handleClick = ()=>{
+      mutation.mutate()
+  }
 
   return (
     <nav className="bg-white shadow-md relative z-50">
@@ -36,7 +61,6 @@ const Navbar = () => {
       <ul className="hidden md:flex items-center space-x-8
         text-sm font-medium text-gray-800"
         >
-        
         {menuItems.map((item, index) => (
           <li 
             key={index} 
@@ -106,14 +130,6 @@ const Navbar = () => {
       {/* Icons and Mobile Menu Toggle */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <FiShoppingBag className="text-xl text-gray-800" />
-            <span className="absolute -top-2 -right-1 bg-deepbrown
-              text-white text-xs rounded-full px-1"
-            >
-              0
-            </span>
-          </div>
           <button className="hidden md:block p-1 bg-gray-800 text-white rounded-full">
             <FiSearch />
           </button>
@@ -122,14 +138,15 @@ const Navbar = () => {
           <div className="relative flex items-center md:space-x-3 space-x-2">
             <div >
                 {
-                  currentUser ? <>
+                  isLoggedIn ? <>
                   <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                       <img src={ Avatar} alt=""
-                        className={`size-7 rounded-full ${currentUser ? 'ring-2 ring-blue-500' : ''}`}
+                        className={`size-7 rounded-full ${isLoggedIn ? 'ring-2 ring-blue-500' : ''}`}
                       />
                   </button>
 
                   {/* show dropdowns */}
+                  
                   {
                     isDropdownOpen && (
                       <div className="absolute right-0 mt-2 w-48 
@@ -149,7 +166,7 @@ const Navbar = () => {
                             }
                             <li>
                                 <button
-                                  onClick={()=>{}}
+                                  onClick={handleClick}
                                   className="block w-full text-left px-4 py-2 
                                     text-sm hover:bg-gray-100"
                                 >
@@ -172,15 +189,37 @@ const Navbar = () => {
                   )
                 }
             </div>
+
+
+            <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+              <Button onClick={() => setOpenCartSheet(true)} size="icon" 
+                className="relative"
+              >
+                <FiShoppingBag className="w-6 h-6" />
+                <span className="absolute top-[-5px] right-[2px] 
+                  font-bold text-sm"
+                >
+                  {cartItems?.length || 0}
+                </span>
+                <span className="sr-only">User cart</span>
+              </Button>
+              
+              <CartWrapper setOpenCartSheet={setOpenCartSheet}
+                 cartItems={cartItems && cartItems.length > 0 ? cartItems : []}
+              />
+
+            </Sheet>
+          
           </div>
 
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden p-2 text-gray-800 focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          ☰
-        </button>
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden p-2 text-gray-800 focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            ☰
+          </button>
+
         </div>
       </div>
     </div>

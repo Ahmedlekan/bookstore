@@ -1,5 +1,6 @@
 import { BookType } from '../../../../backend/src/types/types';
 import { Link } from 'react-router-dom';
+import { useCartContext } from '../../context/useCart';
 
 interface BookCardProps {
   book: BookType;
@@ -7,6 +8,9 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book, onQuickView }: BookCardProps) => {
+
+  const { addToCartHandler} = useCartContext();
+
     
   return (
     <div className="relative bg-white">
@@ -22,86 +26,86 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
           />
         </Link>
 
-      {/* Hover Actions (limited to image only) */}
+        {/* Hover Actions (limited to image only) */}
 
-      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 
-        group-hover:opacity-100 flex items-center justify-center 
-        space-x-4 transition-opacity duration-300 pointer-events-none"
-      >
-        
-        {/* Favorites Button */}
-        <div className="relative group/item">
-          <button 
-            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
-            transition-colors z-10 pointer-events-auto"
-            onClick={() => alert('Added to Favorites')}
-          >
-            ❤️
-          </button>
-          <span className="absolute bottom-full mb-2 left-1/2
-            transform -translate-x-1/2 text-sm bg-black font-body 
-            text-white px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
-            transition-opacity duration-200 whitespace-nowrap pointer-events-none"
-          >
-            Add to Favorites
-          </span>
-        </div>
+        <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 
+          group-hover:opacity-100 hidden md:flex items-center justify-center 
+          space-x-4 transition-opacity duration-300 pointer-events-none"
+        >
+          
+          {/* Favorites Button */}
+          <div className="relative group/item">
+            <button 
+              className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
+              transition-colors z-10 pointer-events-auto"
+              onClick={() => alert('Added to Favorites')}
+            >
+              ❤️
+            </button>
+            <span className="absolute bottom-full mb-2 left-1/2
+              transform -translate-x-1/2 text-sm bg-black font-body 
+              text-white px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
+              transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+            >
+              Add to Favorites
+            </span>
+          </div>
 
-        {/* Cart Button */}
-        <div className="relative group/item">
-          <button 
-            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
-            transition-colors z-10 pointer-events-auto"
-            onClick={() => alert('Added to Cart')}
-          >
-            🛒
-          </button>
-          <span className="absolute bottom-full mb-2 left-1/2 
-            transform -translate-x-1/2 text-sm bg-black text-white 
-            px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
-            transition-opacity duration-200 whitespace-nowrap
-            pointer-events-none font-body"
-          >
-            Add to Cart
-          </span>
-        </div>
+          {/* Cart Button */}
+          <div className="relative group/item">
+            <button 
+              className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
+              transition-colors z-10 pointer-events-auto"
+              onClick={()=>addToCartHandler(book)}
+            >
+              🛒
+            </button>
+            <span className="absolute bottom-full mb-2 left-1/2 
+              transform -translate-x-1/2 text-sm bg-black text-white 
+              px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
+              transition-opacity duration-200 whitespace-nowrap
+              pointer-events-none font-body"
+            >
+              Add to Cart
+            </span>
+          </div>
 
-        {/* Quick Buy Button */}
-        <div className="relative group/item">
-          <button 
-            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
-            transition-colors z-10 pointer-events-auto"
-            onClick={() => alert('Quick Buy')}
-          >
-            ⚡
-          </button>
-          <span className="absolute bottom-full mb-2 left-1/2 transform 
-            -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
-            rounded opacity-0 group-hover/item:opacity-100 transition-opacity
-            duration-200 whitespace-nowrap pointer-events-none font-body"
-          >
-            Compare
-          </span>
-        </div>
+          {/* Quick Buy Button */}
+          <div className="relative group/item">
+            <button 
+              className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
+              transition-colors z-10 pointer-events-auto"
+              onClick={() => alert('Quick Buy')}
+            >
+              ⚡
+            </button>
+            <span className="absolute bottom-full mb-2 left-1/2 transform 
+              -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
+              rounded opacity-0 group-hover/item:opacity-100 transition-opacity
+              duration-200 whitespace-nowrap pointer-events-none font-body"
+            >
+              Compare
+            </span>
+          </div>
 
-        {/* Quick View Button */}
-        <div className="relative group/item">
-          <button 
-            className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
-            transition-colors z-10 pointer-events-auto"
-            onClick={() => onQuickView(book)}
-          >
-            👁
-          </button>
-          <span className="absolute bottom-full mb-2 left-1/2 transform 
-            -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
-            rounded opacity-0 group-hover/item:opacity-100 transition-opacity 
-            duration-200 whitespace-nowrap pointer-events-none font-body"
-          >
-            Quick View
-          </span>
+          {/* Quick View Button */}
+          <div className="relative group/item">
+            <button 
+              className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
+              transition-colors z-10 pointer-events-auto"
+              onClick={() => onQuickView(book)}
+            >
+              👁
+            </button>
+            <span className="absolute bottom-full mb-2 left-1/2 transform 
+              -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
+              rounded opacity-0 group-hover/item:opacity-100 transition-opacity 
+              duration-200 whitespace-nowrap pointer-events-none font-body"
+            >
+              Quick View
+            </span>
+          </div>
         </div>
-      </div>
       </div>
 
       <div className="p-4">
