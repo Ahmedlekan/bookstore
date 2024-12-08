@@ -6,6 +6,7 @@ import mongoose from "mongoose"
 import userRoutes from "../src/routes/user"
 import adminRoutes from "../src/routes/admin"
 import generalRoutes from "../src/routes/general"
+import authRoutes from "../src/routes/auth"
 
 import {v2 as cloudinary} from 'cloudinary';
 
@@ -39,6 +40,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/user", userRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/general", generalRoutes)
+app.use("/api/auth", authRoutes)
 
 app.listen(7000, ()=>{
     console.log("Server running on localhost:7000")
