@@ -85,7 +85,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         } catch (error) {
             console.error( error);
             showToast({ 
-                message: `Failed to update quantity: ${(error as Error).message}`, 
+                message: `${(error as Error).message}`, 
                 type: "ERROR" 
             });
         }
@@ -98,7 +98,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
             showToast({ message: "Book removed from cart", type: "SUCCESS" });
         } catch (error) {
             console.error(error);
-            showToast({ message: "Failed to remove a book from cart", type: "ERROR" });
+            showToast({ 
+                message: `${(error as Error).message}`, type: "ERROR" });
         }
     };
 

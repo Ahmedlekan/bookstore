@@ -15,6 +15,12 @@ export default {
         deepbrown: "#EF8D7C",
       },
     },
+    animation: {
+      pulse: "pulse 1s ease-in-out",
+      bounce: "bounce 0.5s ease-in-out",
+      spin: "spin 0.5s linear",
+      ping: "ping 0.5s linear",
+    },
   },
   plugins: [],
 }

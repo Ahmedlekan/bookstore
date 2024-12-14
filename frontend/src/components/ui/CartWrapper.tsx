@@ -23,11 +23,11 @@ function CartWrapper({ setOpenCartSheet, cartItems }: CartWrapperProps) {
   };
 
   return (
-    <SheetContent className="sm:max-w-md bg-white">
+    <SheetContent className="sm:max-w-md bg-white font-body">
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
-      <div className="mt-8 space-y-4">
+      <div className="max-h-[500px] overflow-y-auto p-4 space-y-4">
       {cartItems && cartItems.length > 0
         ? cartItems.map((item) => {
             return <UserCartItemsContent key={item.bookId} item={item} />;
@@ -40,37 +40,40 @@ function CartWrapper({ setOpenCartSheet, cartItems }: CartWrapperProps) {
         )} 
     </div>
 
-    {cartItems && cartItems.length > 0 
-    ?(
-      <>
-        <div className="mt-8 space-y-4">
-          <div className="flex justify-between">
-            <span className="font-bold">Total</span>
-            <span className="font-bold">${calculateTotal().toFixed(2)}</span>
+    <div className="sticky bottom-0 bg-white p-4">
+      {cartItems && cartItems.length > 0 
+      ?(
+        <>
+          <div className="mt-8 space-y-4">
+            <div className="flex justify-between">
+              <span className="font-bold">Total</span>
+              <span className="font-bold">${calculateTotal().toFixed(2)}</span>
+            </div>
           </div>
-        </div>
+          <Button
+            onClick={() => {
+              navigate("/checkout");
+              setOpenCartSheet(false);
+            }}
+            className="w-full mt-6 bg-black 
+              hover:bg-black/80 text-white font-body"
+          >
+            Checkout
+          </Button>
+        </>
+        ) 
+      : (
         <Button
-          onClick={() => {
-            navigate("/checkout");
-            setOpenCartSheet(false);
-          }}
-          className="w-full mt-6"
-        >
-          Checkout
-        </Button>
-      </>
-      ) 
-    : (
-      <Button
-          onClick={() => {
-            navigate("/product-category");
-            setOpenCartSheet(false);
-          }}
-          className="w-full mt-6"
-        >
-          Let's go shopping
-        </Button>
-    ) }     
+            onClick={() => {
+              navigate("/product-category");
+              setOpenCartSheet(false);
+            }}
+            className="w-full mt-6"
+          >
+            Let's go shopping
+          </Button>
+      ) }  
+    </div>   
      
     </SheetContent>
   );

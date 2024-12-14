@@ -14,7 +14,7 @@ function UserCartItemsContent({ item }: UserCartItemsContentProps) {
   // Handle updating the quantity of a cart item
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity > 0) {
-      updateQuantityHandler(item.bookId, newQuantity);
+       updateQuantityHandler(item.bookId, newQuantity);
     }
   }; 
 
@@ -28,11 +28,15 @@ const itemPrice = (item.oldPrice ?? item.newPrice ?? 0) * item.quantity;
 
   return (
     <div className="flex items-center space-x-4">
-      <img
-        src={item.image && item.image.length > 0 ? item.image[0] : ""}
-        alt={item?.title}
-        className="w-20 h-20 rounded object-cover"
-      />
+
+      <div className="w-32 h-36">
+        <img
+          src={item.image && item.image.length > 0 ? item.image[0] : ""}
+          alt={item?.title}
+          className="w-full h-full object-contain"
+        />
+      </div>
+
       <div className="flex-1">
         <h3 className="font-extrabold">{item?.title}</h3>
         <div className="flex items-center gap-2 mt-1">
@@ -40,7 +44,7 @@ const itemPrice = (item.oldPrice ?? item.newPrice ?? 0) * item.quantity;
             variant="outline"
             className="h-8 w-8 rounded-full"
             size="icon"
-            disabled={item?.quantity === 1}
+            disabled={item?.quantity <= 1}
             onClick={() => handleQuantityChange(item.quantity - 1)}
           >
             <Minus className="w-4 h-4" />

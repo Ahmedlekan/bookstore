@@ -1,5 +1,6 @@
 import React from 'react';
 import { BookType } from '../../../../backend/src/types/types';
+import { useCartContext } from '../../context/useCart';
 
 interface ModalProps {
   book: BookType
@@ -8,7 +9,17 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
+  const {addToCartHandler, updateQuantityHandler, cartItems} = useCartContext()
+
   if (!isOpen || !book) return null;
+
+  const cartItem = cartItems.find((item) => item.bookId === book._id);
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity > 0) {
+      updateQuantityHandler(book._id, newQuantity);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50
@@ -48,12 +59,33 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
             <div className=' flex gap-4 border-b border-gray-300 pb-6'>
               
               <div className=' flex gap-3'>
-                <button className=' bg-gray-300 px-4 rounded-md font-semibold'>1</button>
+                <button className=' bg-gray-300 px-4
+                  rounded-md font-semibold'
+                >
+                  <span className="font-semibold">
+                  {cartItem ? cartItem.quantity : 0}
+                  </span>
+                </button>
                 <div className='flex flex-col gap-2'>
-                  <button className='bg-gray-300 px-2 rounded-md font-semibold'>+</button>
-                  <button className='bg-gray-300 px-2 rounded-md font-semibold'>-</button>
+                  <button className='bg-gray-300 px-2
+                    rounded-md font-semibold'
+                    onClick={() => cartItem && handleQuantityChange(cartItem.quantity + 1)}
+                  >
+                    +
+                  </button>
+                  <button className='bg-gray-300 px-2
+                    rounded-md font-semibold'
+                    onClick={() => cartItem && handleQuantityChange(cartItem.quantity - 1)}
+                  >
+                    -
+                  </button>
                 </div>
-                <button className=' bg-black text-white px-4 rounded-md font-body'>Add To Cart</button>
+                <button className=' bg-black text-white px-4
+                  rounded-md font-body'
+                  onClick={()=>addToCartHandler(book)}
+                >
+                    Add To Cart
+                </button>
               </div>
             </div>
 
@@ -108,7 +140,7 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
 
             <div className='text-gray-500 font-body'>
               <p>SKU: BKS14957</p>
-              <h2>Category: {book.categories}</h2>
+              <p>Category: {book.categories?.join(", ")}</p>
               <p>Tag: </p>
             </div>
 

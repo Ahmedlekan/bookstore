@@ -1,6 +1,7 @@
 import { BookType } from '../../../../backend/src/types/types';
 import { Link } from 'react-router-dom';
 import { useCartContext } from '../../context/useCart';
+import { useState } from 'react';
 
 interface BookCardProps {
   book: BookType;
@@ -8,9 +9,24 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book, onQuickView }: BookCardProps) => {
-
   const { addToCartHandler} = useCartContext();
+  
+  const [isAnimating, setIsAnimating] = useState<{
+    [key: string]: boolean;
+  }>({
+    addToCart: false,
+    addToFavorites: false,
+    compare: false,
+    quickView: false,
+  });
 
+  const handleActionWithAnimation = (action: keyof typeof isAnimating, callback: () => void) => {
+    setIsAnimating((prev) => ({ ...prev, [action]: true }));
+    setTimeout(() => {
+      setIsAnimating((prev) => ({ ...prev, [action]: false }));
+      callback();
+    }, 700); // Animation duration (same as rolling circle)
+  };
     
   return (
     <div className="relative bg-white">
@@ -35,14 +51,21 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
           
           {/* Favorites Button */}
           <div className="relative group/item">
-            <button 
+            <button
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
               transition-colors z-10 pointer-events-auto"
-              onClick={() => alert('Added to Favorites')}
+              onClick={() =>
+                handleActionWithAnimation("addToFavorites", () => alert("Added to Favorites"))
+              }
             >
-              ❤️
+              {isAnimating.addToFavorites ? (
+                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+              ) : (
+                "❤️"
+              )}
             </button>
-            <span className="absolute bottom-full mb-2 left-1/2
+            <span
+              className="absolute bottom-full mb-2 left-1/2
               transform -translate-x-1/2 text-sm bg-black font-body 
               text-white px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
               transition-opacity duration-200 whitespace-nowrap pointer-events-none"
@@ -53,14 +76,21 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
 
           {/* Cart Button */}
           <div className="relative group/item">
-            <button 
+            <button
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
               transition-colors z-10 pointer-events-auto"
-              onClick={()=>addToCartHandler(book)}
+              onClick={() =>
+                handleActionWithAnimation("addToCart", () => addToCartHandler(book))
+              }
             >
-              🛒
+              {isAnimating.addToCart ? (
+                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+              ) : (
+                "🛒"
+              )}
             </button>
-            <span className="absolute bottom-full mb-2 left-1/2 
+            <span
+              className="absolute bottom-full mb-2 left-1/2 
               transform -translate-x-1/2 text-sm bg-black text-white 
               px-2 py-1 rounded opacity-0 group-hover/item:opacity-100 
               transition-opacity duration-200 whitespace-nowrap
@@ -72,14 +102,21 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
 
           {/* Quick Buy Button */}
           <div className="relative group/item">
-            <button 
+            <button
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
               transition-colors z-10 pointer-events-auto"
-              onClick={() => alert('Quick Buy')}
+              onClick={() =>
+                handleActionWithAnimation("compare", () => alert("Quick Buy"))
+              }
             >
-              ⚡
+              {isAnimating.compare ? (
+                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+              ) : (
+                "⚡"
+              )}
             </button>
-            <span className="absolute bottom-full mb-2 left-1/2 transform 
+            <span
+              className="absolute bottom-full mb-2 left-1/2 transform 
               -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
               rounded opacity-0 group-hover/item:opacity-100 transition-opacity
               duration-200 whitespace-nowrap pointer-events-none font-body"
@@ -90,14 +127,21 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
 
           {/* Quick View Button */}
           <div className="relative group/item">
-            <button 
+            <button
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
               transition-colors z-10 pointer-events-auto"
-              onClick={() => onQuickView(book)}
+              onClick={() =>
+                handleActionWithAnimation("quickView", () => onQuickView(book))
+              }
             >
-              👁
+              {isAnimating.quickView ? (
+                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+              ) : (
+                "👁"
+              )}
             </button>
-            <span className="absolute bottom-full mb-2 left-1/2 transform 
+            <span
+              className="absolute bottom-full mb-2 left-1/2 transform 
               -translate-x-1/2 text-sm bg-black text-white px-2 py-1 
               rounded opacity-0 group-hover/item:opacity-100 transition-opacity 
               duration-200 whitespace-nowrap pointer-events-none font-body"
@@ -105,6 +149,7 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
               Quick View
             </span>
           </div>
+
         </div>
       </div>
 

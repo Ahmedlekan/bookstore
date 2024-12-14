@@ -95,6 +95,9 @@ export const fetchBookById = async(bookId: string): Promise<BookType>=>{
 
 // update book quantity
 export const updateCartQuantity = async (bookId: string, quantity: number) => {
+    
+    console.log("Payload sent to updateCartQuantity:", { bookId, quantity });
+
     const response = await fetch(`${API_BASE_URL}/api/general/update-cart-quantity`, {
         method: "PATCH",
         headers: {
