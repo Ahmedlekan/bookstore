@@ -4,6 +4,7 @@ export type BookCategory = "Fantasy" | "History" | "Cook Book" | "Romance";
 
 export interface BookType {
   _id: string;
+  userId: string
   title: string;
   author: string;
   publisher: string;
@@ -46,6 +47,7 @@ export type CartItem = {
 };
 
 export type CartType = {
+  userId: string
   items: CartItem[]; 
 }
 

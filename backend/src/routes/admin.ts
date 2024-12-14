@@ -19,7 +19,7 @@ const upload = multer({
 })
 
 // post a book
-router.post("/create-book", upload.array("imageFiles", 6),
+router.post("/create-book", verifyToken, upload.array("imageFiles", 6),
     async( req: Request, res: Response)=>{
 
     try {
@@ -41,8 +41,7 @@ router.post("/create-book", upload.array("imageFiles", 6),
 
         // uploading the image to cloudinary
         const imageUrls = await uploadImages(imageFiles)
-        console.log('Uploaded Image URLs:', imageUrls);
-        
+    
         //if the upload was successful add the imageUrls to the newHotel
         newBook.imageUrls = imageUrls
 
@@ -56,7 +55,7 @@ router.post("/create-book", upload.array("imageFiles", 6),
 })
 
 // get all books
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", verifyToken, async (req: Request, res: Response) => {
     
     try {
         const books = await Book.find().sort({ createdAt: -1});
@@ -87,7 +86,7 @@ router.get("/:id", async(req: Request, res: Response)=>{
 })
 
 // For editing a book and its images
-router.put("/:id", upload.array("imageFiles"), async(req:Request, res:Response)=>{
+router.put("/:id", verifyToken, upload.array("imageFiles"), async(req:Request, res:Response)=>{
     
     try {
         // Extract book ID from the URL
@@ -137,7 +136,7 @@ router.put("/:id", upload.array("imageFiles"), async(req:Request, res:Response)=
 
 
 // For deleting a book 
-router.delete("/:id", async(req: Request, res:Response)=>{
+router.delete("/:id", verifyToken, async(req: Request, res:Response)=>{
     
     try {
         
@@ -157,7 +156,6 @@ router.delete("/:id", async(req: Request, res:Response)=>{
         res.status(500).send({message: "Failed to delete a book"})
     }
 })
-
 
 const  uploadImages = async (imageFiles: Express.Multer.File[])=>{
     // Upload the images to Cloudinary

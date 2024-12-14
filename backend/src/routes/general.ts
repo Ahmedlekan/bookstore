@@ -3,6 +3,7 @@ import {validationResult, param} from "express-validator"
 import Book from "../models/books"
 import Cart from "../models/cart"
 import { BookFilterResponse } from "../types/types"
+import mongoose from "mongoose"
 
 
 const router =  express.Router();
@@ -66,8 +67,8 @@ router.post("/add-to-cart", async (req:Request, res:Response) => {
 
     try {
 
-        const userId = req.userId || "guest";; // Extracted from the decoded JWT token
-        const { bookId, quantity } = req.body;        
+        const userId = req.userId || "guest"; // Extracted from the decoded JWT token
+        const { bookId, quantity } = req.body;    
         
         // Fetch the full book details from the database
         const book = await Book.findById(bookId);
@@ -119,7 +120,7 @@ router.get("/fetch-cart-items", async (req: Request, res:Response) => {
         }
 
         const itemsWithDetails = cart.items.map((item) => ({
-            productId: item.bookId._id,
+            bookId: item.bookId._id,
             title: item.bookId.title,
             image: item?.bookId.imageUrls ?? [], // Assuming it's the first image
             newprice: item.bookId.newPrice,
@@ -168,8 +169,17 @@ router.patch("/update-cart-quantity", async (req:Request, res:Response) => {
     const userId = req.userId || "guest";
     const { bookId, quantity } = req.body;
 
-    if (quantity <= 0) {
+    console.log("The", bookId, quantity)
+
+    // Ensure quantity is valid
+    if (!quantity || quantity <= 0) {
         res.status(400).json({ success: false, message: "Quantity must be greater than 0" });
+        return;
+    }
+
+    // Validate bookId
+    if (!bookId || !mongoose.isValidObjectId(bookId)) {
+        res.status(400).json({ success: false, message: "Invalid Book ID" });
         return
     }
 
@@ -180,9 +190,6 @@ router.patch("/update-cart-quantity", async (req:Request, res:Response) => {
             res.status(404).json({ success: false, message: "Cart not found" });
             return
         }
-
-        console.log("Cart Items:", cart.items);
-        console.log("Request Book ID:", bookId);
 
         const itemIndex = cart.items.findIndex(item => item.bookId.toString() === bookId);
         
@@ -203,8 +210,15 @@ router.patch("/update-cart-quantity", async (req:Request, res:Response) => {
 
 // Delete a product from the cart
 router.delete("/delete-cart-item", async (req:Request, res:Response) => {
+
     const userId = req.userId || "guest";
     const { bookId } = req.body;
+
+    // Validate bookId
+    if (!bookId || !mongoose.isValidObjectId(bookId)) {
+        res.status(400).json({ success: false, message: "Invalid Book ID" });
+        return
+    }
 
     try {
         const cart = await Cart.findOne({ userId });
@@ -215,20 +229,19 @@ router.delete("/delete-cart-item", async (req:Request, res:Response) => {
 
         const itemIndex = cart.items.findIndex(item => item.bookId.toString() === bookId);
         if (itemIndex === -1) {
-            res.status(404).json({ success: false, message: "Product not found in cart" });
+            res.status(404).json({ success: false, message: "Book not found in cart" });
             return
         }
 
         cart.items.splice(itemIndex, 1);
         await cart.save();
 
-        res.status(200).json({ success: true, message: "Product removed from cart", cart });
+        res.status(200).json({ success: true, message: "Book removed from cart", cart });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: "An error occurred" });
     }
 });
-
 
 
 const constructSearchQuery = (queryParams: any)=>{
