@@ -41,34 +41,31 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
     const addToCartHandler = async (book: BookType) => {
         try {
+
+            // Check if the book is already in the cart
+            const existingItem = cartItems.find(item => item.bookId === book._id);
+
+            if (existingItem) {
+                showToast({ message: "Book already in cart", type: "ERROR" });
+                return; // Exit early if the book is already in the cart
+            }
+            
             // Add book to the cart
             await addToCart(book._id);
-            
-            // Update cartItems state
-            setCartItems((prevItems) => {
-                const existingItem = prevItems.find(item => item.bookId === book._id);
-    
-                if (existingItem) {
-                    return prevItems.map(item =>
-                        item.bookId === book._id
-                            ? { ...item, quantity: item.quantity + 1 }
-                            : item
-                    );
-                } else {
-                    // Ensure the new item matches the CartItem type exactly
-                    const newItem: CartItemItemsProps = {
-                        bookId: book._id,
-                        title: book.title,
-                        image: [book.imageUrls[0]], // Assuming it's the first image
-                        newPrice: book.newPrice,
-                        oldPrice: book.oldPrice,
-                        quantity: 1
-                    };
-                    return [...prevItems, newItem];
-                }
-            });
 
+            // Update cartItems state
+            const newItem: CartItemItemsProps = {
+                bookId: book._id,
+                title: book.title,
+                image: [book.imageUrls[0]], // Assuming it's the first image
+                newPrice: book.newPrice,
+                oldPrice: book.oldPrice,
+                quantity: 1
+            };
+
+            setCartItems((prevItems) => [...prevItems, newItem]);
             showToast({ message: "Book added to cart", type: "SUCCESS" });
+
             } catch (error) {
                 console.error(error); 
                 showToast({ message: "Failed to add a book to cart", type: "ERROR" });

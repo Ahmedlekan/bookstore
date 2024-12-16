@@ -22,16 +22,6 @@ if(isError){
   return <div> No Products Found</div>
 }
 
-// const handleEdit = (id: string) => {
-//   console.log("Edit book with ID:", id);
-//   // Add navigation or logic for editing
-// };
-
-// const handleDelete = (id: string) => {
-//   console.log("Delete book with ID:", id);
-//   // Add delete logic
-// };
-
   return (
     <div>
         <div className="">

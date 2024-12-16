@@ -20,7 +20,7 @@ const AdminBookCard:React.FC<AdminBookCardProps> = ({data}) => {
     };
 
   return (
-    <div className="flex border rounded-lg p-4 shadow-md hover:shadow-lg">
+    <div className="flex border rounded-lg p-4 shadow-md hover:shadow-lg font-body">
       {/* Left Side: Book Image and Details */}
       
       <div className="flex-1 flex items-start gap-10">
@@ -44,13 +44,15 @@ const AdminBookCard:React.FC<AdminBookCardProps> = ({data}) => {
       {/* Right Side: Actions */}
       <div className="flex flex-col items-end justify-between">
         <button
-          className="bg-blue-500 text-white text-sm px-4 py-2 rounded-md hover:bg-blue-600"
+          className="bg-black text-white text-sm px-4 py-2
+          rounded-md hover:bg-black/80"
           onClick={() => setOpenCreateEditBooksDialog(true)}
         >
           Edit
         </button>
         <button
-          className="bg-red-500 text-white text-sm px-4 py-2 rounded-md hover:bg-red-600"
+          className="bg-black text-white text-sm px-4 py-2
+          rounded-md hover:bg-black/80"
           onClick={handleDeleteClick}
         >
           Delete

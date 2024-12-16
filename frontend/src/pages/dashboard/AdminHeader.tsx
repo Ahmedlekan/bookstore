@@ -36,7 +36,7 @@ const AdminHeader = () => {
   return (
     <div className='flex-grow text-gray-800'>
         <div className="flex items-center h-20
-            px-6 sm:px-10 bg-white"
+            px-6 sm:px-10 bg-white font-body"
         >      
             <div className="block sm:hidden relative flex-shrink-0 p-2
                 mr-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800 
@@ -86,7 +86,10 @@ const AdminHeader = () => {
                     <span className="text-sm text-gray-600">Lecturer</span>
                     </div>
                     <span className="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="user profile photo" className="h-full w-full object-cover"/>
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg"
+                        alt="user profile photo"
+                        className="h-full w-full object-cover"
+                    />
                     </span>
                     <svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor" className="hidden sm:block h-6 w-6 text-gray-300">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -145,7 +148,7 @@ const AdminHeader = () => {
                 md:space-y-0 md:flex-row justify-between"
             >
             
-                <div className="mr-6">
+                <div className="mr-6 font-body">
                     <h1 className="text-4xl font-semibold mb-2">Dashboard</h1>
                     <h2 className="text-gray-600 ml-0.5">Book Store Inventory</h2>
                 </div>
@@ -153,12 +156,11 @@ const AdminHeader = () => {
                 <div className="flex flex-col md:flex-row
                     items-start justify-end -mb-3"
                 >
-                    <Link to="/dashboard/manage-books"
-                        className="inline-flex px-5 py-3 
-                        text-purple-600 hover:text-purple-700 
-                        focus:text-purple-700 hover:bg-purple-100 
-                        focus:bg-purple-100 border border-purple-600 
-                        rounded-md mb-3"
+                    <Link to="#"
+                        className="inline-flex px-5 py-3 font-body 
+                        text-black hover:text-black/80 
+                        focus:text-black/80 hover:bg-deepbrown/10 
+                        border border-black rounded-md mb-3"
                     >
                         <svg aria-hidden="true" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" 
@@ -173,8 +175,8 @@ const AdminHeader = () => {
                     </Link>
 
                     <button className="inline-flex px-5 py-3 text-white 
-                        bg-deepbrown hover:bg-pink-300 
-                        focus:bg-deepbrown rounded-md ml-6 mb-3"
+                        bg-black hover:bg-black/80 font-body 
+                         rounded-md ml-6 mb-3"
                         onClick={()=>setOpenCreateBooksDialog(true)}
                     >
                         <svg aria-hidden="true" fill="none"

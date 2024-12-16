@@ -37,7 +37,7 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
           <img
             src={book.imageUrls?.[0] || ""}
             alt={book.title}
-            className="w-full h-96 object-cover transition-transform
+            className="w-full h-[450px] object-cover transition-transform
             duration-300 group-hover:scale-105 cursor-pointer"
           />
         </Link>

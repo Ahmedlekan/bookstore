@@ -16,15 +16,17 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
   const cartItem = cartItems.find((item) => item.bookId === book._id);
 
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity > 0) {
-      updateQuantityHandler(book._id, newQuantity);
+    if (newQuantity < 1) {
+      alert("Can't go below 1");
+      return;
     }
+    updateQuantityHandler(book._id, newQuantity);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50
       z-50 flex items-center justify-center">
-      <div className="bg-white w-full h-[90%] max-w-4xl
+      <div className="bg-white w-full h-[90%] max-w-3xl
         rounded-lg shadow-lg overflow-hidden"
       >
 
@@ -46,7 +48,7 @@ const Modal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-black transition
-              absolute top-0 right-5 text-2xl"
+              absolute top-0 right-2 text-2xl bg-gray-200 px-1"
             >
               ✕
             </button>

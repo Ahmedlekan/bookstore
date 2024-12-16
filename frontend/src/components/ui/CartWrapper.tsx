@@ -27,7 +27,7 @@ function CartWrapper({ setOpenCartSheet, cartItems }: CartWrapperProps) {
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
-      <div className="max-h-[500px] overflow-y-auto p-4 space-y-4">
+      <div className="max-h-[300px] overflow-y-auto p-4 space-y-4">
       {cartItems && cartItems.length > 0
         ? cartItems.map((item) => {
             return <UserCartItemsContent key={item.bookId} item={item} />;

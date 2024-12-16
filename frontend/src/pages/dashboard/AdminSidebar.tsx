@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 const AdminSidebar = () => {
   return (
-    <aside className="hidden sm:flex sm:flex-col">
+    <aside className="hidden sm:flex sm:flex-col font-body">
         <Link to="/" className="inline-flex items-center
-            justify-center h-20 w-20 bg-purple-600 
-            hover:bg-purple-500 focus:bg-purple-500"
+            justify-center h-20 w-20 bg-deepbrown 
+            hover:bg-deepbrown/90 focus:bg-deepbrown"
         >
             <img src="/fav-icon.png" alt="" />
         </Link>
@@ -35,7 +35,7 @@ const AdminSidebar = () => {
 
                 <Link to="dashboard" className="inline-flex
                     items-center justify-center py-3 
-                    text-purple-600 bg-white rounded-lg"
+                    text-deepbrown bg-white rounded-lg"
                 >
                     <span className="sr-only">Dashboard</span>
                     <svg aria-hidden="true" fill="none"

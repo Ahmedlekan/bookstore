@@ -13,10 +13,12 @@ function UserCartItemsContent({ item }: UserCartItemsContentProps) {
 
   // Handle updating the quantity of a cart item
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity > 0) {
-       updateQuantityHandler(item.bookId, newQuantity);
+    if (newQuantity < 1) {
+      alert("Can't go below 1");
+      return;
     }
-  }; 
+    updateQuantityHandler(item.bookId, newQuantity);
+  };
 
 // Handle deleting a cart item
 const handleRemove = () => {
@@ -44,7 +46,6 @@ const itemPrice = (item.oldPrice ?? item.newPrice ?? 0) * item.quantity;
             variant="outline"
             className="h-8 w-8 rounded-full"
             size="icon"
-            disabled={item?.quantity <= 1}
             onClick={() => handleQuantityChange(item.quantity - 1)}
           >
             <Minus className="w-4 h-4" />

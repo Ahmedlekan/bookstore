@@ -3,21 +3,18 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import * as generalApiClient from "../../apiClient/general"
 import Loading from "../../components/ui/Loading";
+import { useCartContext } from "../../context/useCart";
 
 const BookDetails = () => {
-
+  const [activeImage, setActiveImage] = useState<string | null>(null);
   const {bookId} = useParams<{ bookId: string }>()
-  
-  // Set the first image as the active image initially
-const [activeImage, setActiveImage] = useState<string | null>(null);
+  const {addToCartHandler} = useCartContext()
 
   const {data : book, isLoading, isError} = useQuery({
-      queryKey:["fetchBoookById", bookId],
+      queryKey:["fetchBookById", bookId],
       queryFn: ()=> generalApiClient.fetchBookById(bookId || ""),
       enabled: !!bookId,
   })
-
-  console.log(book)
 
   // Handle loading state
   if (isLoading) {
@@ -33,17 +30,16 @@ if (!activeImage && book.imageUrls && book.imageUrls.length > 0) {
   setActiveImage(book.imageUrls[0]);
 }
 
-
   return (
     <div className="bg-gray-50 min-h-screen py-10 px-4 md:px-10 lg:px-20">
       <div className="flex flex-col lg:flex-row gap-10">
         {/* Left: Book Image */}
         
-        <div className="flex-1">
+        <div className="flex-1 w-full h-[600px]">
           <img
             src={book.imageUrls?.[0] || ""}
             alt={book.title}
-            className="w-full h-auto max-h-[700px] object-cover rounded-lg shadow-md"
+            className="w-full h-full object-contain rounded-lg shadow-md"
           />
         </div>
 
@@ -79,7 +75,7 @@ if (!activeImage && book.imageUrls && book.imageUrls.length > 0) {
             <button
               className="bg-black text-white px-6 py-2
                 rounded-lg hover:bg-black/80 transition"
-              onClick={() => alert("Added to Cart")}
+              onClick={() => addToCartHandler(book)}
             >
               Add to Cart 🛒
             </button>

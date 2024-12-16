@@ -10,7 +10,7 @@ const Footer = () => {
           
           {/* Book Shop */}
           <div>
-            <h2 className="text-xl font-bold mb-4 font-display text-pink-400">DIPLO SHOP</h2>
+            <h2 className="text-xl font-bold mb-4 font-display text-deepbrown">DIPLO SHOP</h2>
             <address className="not-italic text-sm space-y-4 font-body">
               <p>1203 Town Center</p>
               <p>Drive FL 33458 USA</p>
