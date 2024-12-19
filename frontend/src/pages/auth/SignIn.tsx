@@ -11,7 +11,7 @@ const SignIn = () => {
 
     const {register, handleSubmit, formState:{errors}} = useForm<LoginFormDataprops>()
     const queryClient = useQueryClient()
-    const {showToast} = useAppContext()
+    const {showToast, signInWithGoogle} = useAppContext()
     const navigate = useNavigate()
     // const location = useLocation();
 
@@ -35,6 +35,17 @@ const SignIn = () => {
     //     // Redirect to the intended page after login
     // navigate(from, { replace: true });
     })
+
+    const handleGoogleSignIn = async() => {
+        try {
+            await signInWithGoogle();
+            showToast({message:"Login Success!", type: "SUCCESS"})
+            navigate("/")
+        } catch (error) {
+            showToast({ message: "Failed to sign in with Google", type: "ERROR" })
+            console.error(error)
+        }
+    }
     
   return (
     <div className='h-[100vh] flex justify-center
@@ -96,7 +107,7 @@ const SignIn = () => {
             {/* google sign in */}
             <div className='mt-4'>
                 <button 
-                    onClick={()=>{}}
+                    onClick={handleGoogleSignIn}
                     className='w-full flex flex-wrap gap-1 items-center
                     justify-center bg-gray-400 font-body hover:bg-gray-600 
                     text-white font-bold py-2 px-4 rounded 

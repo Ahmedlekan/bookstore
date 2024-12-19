@@ -11,7 +11,7 @@ import * as userAapiClient from "../../apiClient/user"
 
 const Register = () => {
     const {register, watch, handleSubmit, formState:{errors}} = useForm<RegisterFormDataprops>()
-    const {showToast} = useAppContext()
+    const {showToast, signInWithGoogle} = useAppContext()
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
@@ -30,6 +30,17 @@ const Register = () => {
     const onSubmit = handleSubmit((data)=>{
         mutation.mutate(data)
     })
+
+    const handleGoogleSignIn = async() => {
+        try {
+            await signInWithGoogle();
+            showToast({message:"Login Success!", type: "SUCCESS"})
+            navigate("/")
+        } catch (error) {
+            showToast({ message: "Failed to sign in with Google", type: "ERROR" })
+            console.error(error)
+        }
+    }
 
   return (
     <div className='h-[100vh] flex justify-center
@@ -103,7 +114,8 @@ const Register = () => {
 
                 <div>
                     <button className='bg-black hover:bg-black/80 font-body
-                    text-white font-bold py-2 px-8 rounded focus:outline-none'>
+                    text-white font-bold py-2 px-8 rounded focus:outline-none'
+                    >
                         Register 
                     </button>
                 </div>
@@ -121,7 +133,7 @@ const Register = () => {
             {/* google sign in */}
             <div className='mt-4'>
                 <button 
-                    onClick={()=>{}}
+                    onClick={handleGoogleSignIn}
                     className='w-full flex flex-wrap gap-1 items-center
                         justify-center bg-gray-400 font-body hover:bg-gray-600 
                         text-white font-bold py-2 px-4 rounded focus:outline-none'
