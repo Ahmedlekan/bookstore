@@ -1,11 +1,41 @@
-import React from "react";
+import React,{useState} from "react";
 import { useCartContext } from "../../context/useCart";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import * as generalApiClient from "../../apiClient/general"
+import { useQuery } from "@tanstack/react-query";
 
 const CheckoutPage: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const { cartItems } = useCartContext();
   const navigate = useNavigate();
+
+  const { refetch } = useQuery({
+    queryKey: ["createPaymentIntent"],
+    queryFn: () => generalApiClient.createPaymentIntent(cartItems),
+    enabled: false, // Only run on user action
+});
+
+const handlePayment = async () => {
+  setLoading(true);
+  try {
+      // Get the session URL from the result of `refetch`
+      const { data: fetchedSessionUrl } = await refetch();
+
+      // Redirect immediately after getting the URL
+      if (fetchedSessionUrl) {
+          console.log("Redirecting to Stripe:", fetchedSessionUrl);
+          window.location.href = fetchedSessionUrl; // Redirect to Stripe session
+      } else {
+          console.error("Session URL not found");
+      }
+  } catch (error) {
+      console.error("Error initiating payment", error);
+  } finally {
+      setLoading(false);
+  }
+};
+
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
@@ -76,10 +106,11 @@ const CheckoutPage: React.FC = () => {
             </span>
           </div>
           <Button
-            className="w-full mt-4 bg-black hover:bg-black/80 text-white py-2 rounded-md"
-            onClick={() => navigate("/payment")}
+            className="w-full mt-4 bg-black hover:bg-black/80
+              text-white py-2 rounded-md"
+            onClick={handlePayment}
           >
-            Proceed to Payment
+           {loading ? 'Processing...' : 'Checkout with Stripe'}
           </Button>
         </div>
 
@@ -87,7 +118,7 @@ const CheckoutPage: React.FC = () => {
         <div className="mt-6 text-center">
           <button
             className="text-black font-semibold hover:underline"
-            onClick={() => navigate("/product-category")}
+            onClick={() => navigate("/books-store")}
           >
             Continue Shopping
           </button>

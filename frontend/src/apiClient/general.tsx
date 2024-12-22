@@ -1,5 +1,6 @@
 import { BookFilterResponse }  from "../../../backend/src/types/types"
 import { BookType } from "../../../backend/src/types/types";
+import { CartItemItemsProps } from "../../../backend/src/types/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""
 
@@ -79,6 +80,24 @@ export const fetchCartItems = async () => {
 };
 
 
+// for creating payment intent
+export const createPaymentIntent = async (cartItems: CartItemItemsProps[]) => {
+    const response = await fetch(`${API_BASE_URL}/api/stripe/checkout`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems }),  // Send cart items to the backend
+    });
+
+    if (!response.ok) throw new Error("Error fetching payment intent");
+
+    const { url } = await response.json();
+    console.log("Stripe session URL:", url); 
+    return url;
+};
+
+
+
 export const fetchBookById = async(bookId: string): Promise<BookType>=>{
     const response = await fetch(`${API_BASE_URL}/api/general/${bookId}`, {
         credentials: "include"
@@ -131,4 +150,5 @@ export const deleteCartItem = async (bookId: string) => {
 
     return response.json();
 };
+
 
