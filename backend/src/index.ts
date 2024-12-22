@@ -7,6 +7,7 @@ import userRoutes from "../src/routes/user"
 import adminRoutes from "../src/routes/admin"
 import generalRoutes from "../src/routes/general"
 import authRoutes from "../src/routes/auth"
+import stripeRoutes from "../src/routes/stripe"
 
 import {v2 as cloudinary} from 'cloudinary';
 
@@ -41,11 +42,10 @@ app.use("/api/user", userRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/general", generalRoutes)
 app.use("/api/auth", authRoutes)
+app.use("/api/stripe", stripeRoutes)
 
 app.listen(7000, ()=>{
     console.log("Server running on localhost:7000")
 })
-
-
 
 

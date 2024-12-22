@@ -123,7 +123,7 @@ router.get("/fetch-cart-items", async (req: Request, res:Response) => {
             bookId: item.bookId._id,
             title: item.bookId.title,
             image: item?.bookId.imageUrls ?? [], // Assuming it's the first image
-            newprice: item.bookId.newPrice,
+            newPrice: item.bookId.newPrice,
             oldPrice: item.bookId.oldPrice,
 
             quantity: 1
