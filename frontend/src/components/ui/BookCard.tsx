@@ -2,6 +2,7 @@ import { BookType } from '../../../../backend/src/types/types';
 import { Link } from 'react-router-dom';
 import { useCartContext } from '../../context/useCart';
 import { useState } from 'react';
+import { useAppContext } from '../../context/useAppContext';
 
 interface BookCardProps {
   book: BookType;
@@ -9,7 +10,8 @@ interface BookCardProps {
 }
 
 const BookCard = ({ book, onQuickView }: BookCardProps) => {
-  const { addToCartHandler} = useCartContext();
+  const { addToCartHandler, isFavorite, toggleFavorite} = useCartContext();
+  const {showToast} = useAppContext()
   
   const [isAnimating, setIsAnimating] = useState<{
     [key: string]: boolean;
@@ -26,6 +28,15 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
       setIsAnimating((prev) => ({ ...prev, [action]: false }));
       callback();
     }, 700); // Animation duration (same as rolling circle)
+  };
+
+  const handleFavorites = () => {
+    if (isFavorite(book._id)) {
+      showToast({message:"Already in Favorites", type: "ERROR"})
+    } else {
+      toggleFavorite(book);
+      showToast({message:"Added to Favorites", type: "SUCCESS"})
+    }
   };
     
   return (
@@ -55,13 +66,14 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
               className="p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 
               transition-colors z-10 pointer-events-auto"
               onClick={() =>
-                handleActionWithAnimation("addToFavorites", () => alert("Added to Favorites"))
+                handleActionWithAnimation("addToFavorites", handleFavorites)
               }
             >
               {isAnimating.addToFavorites ? (
-                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-t-transparent 
+              border-gray-400 rounded-full animate-spin"></div>
               ) : (
-                "❤️"
+                isFavorite(book._id) ? "❤️" : "🤍"
               )}
             </button>
             <span
@@ -84,7 +96,8 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
               }
             >
               {isAnimating.addToCart ? (
-                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-t-transparent 
+                border-gray-400 rounded-full animate-spin"></div>
               ) : (
                 "🛒"
               )}
@@ -110,7 +123,8 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
               }
             >
               {isAnimating.compare ? (
-                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-t-transparent 
+                border-gray-400 rounded-full animate-spin"></div>
               ) : (
                 "⚡"
               )}
@@ -135,7 +149,8 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
               }
             >
               {isAnimating.quickView ? (
-                <div className="w-6 h-6 border-2 border-t-transparent border-gray-400 rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-t-transparent 
+                border-gray-400 rounded-full animate-spin"></div>
               ) : (
                 "👁"
               )}

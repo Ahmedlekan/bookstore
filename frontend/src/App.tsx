@@ -10,6 +10,7 @@ import ManageBooks from "./pages/dashboard/ManageBooks"
 import Books from "./pages/dashboard/Books"
 import BooksStore from "./pages/general/BooksStore"
 import BookDetails from "./pages/general/BookDetails"
+import Favorites from "./pages/general/Favorites"
 // import Account from "./pages/general/Account"
 import Checkout from "./pages/general/Checkout"
 
@@ -25,6 +26,8 @@ function App() {
           <Route path="signin" element={<SignIn/>} />
           <Route path="books-store" element={<BooksStore />} />
           <Route path="book/:bookId" element={<BookDetails />} />
+          <Route path="favorites" element={<Favorites />} />
+          
           <Route path="/checkout" element={<Checkout />} />
         </Route>
 

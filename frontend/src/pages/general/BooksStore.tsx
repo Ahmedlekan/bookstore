@@ -9,7 +9,6 @@ import { BookType } from "../../../../backend/src/types/types"
 import BookCard from "../../components/ui/BookCard"
 import Modal from "../../components/ui/Modal"
 
-
 const BooksStore = () => {
     const [page, setPage] = useState<number>(1)
     const [sortOption, setSortOption] = useState<string>("");
@@ -25,6 +24,11 @@ const BooksStore = () => {
         maxPrice: selectedPrice?.toString(),
         sortOption
       }
+
+    const {data: book, isLoading, isError} = useQuery({
+    queryKey:["searchBooks", searchParams],
+    queryFn: ()=> generalApiClient.searchBooks(searchParams)
+    })
 
           // adding and removing the type and unchecked type
     const categoryTypesChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
@@ -44,11 +48,6 @@ const BooksStore = () => {
         setPage(1);
         setTitle("")
     };
-
-    const {data: book, isLoading, isError} = useQuery({
-        queryKey:["searchBooks", searchParams],
-        queryFn: ()=> generalApiClient.searchBooks(searchParams)
-      })
 
     if (isLoading){
         return <Loading />
@@ -83,18 +82,14 @@ const BooksStore = () => {
 
                 <button onClick={handleResetFilters}>Reset Filters</button>
 
-                <select 
-                    className="p-2 border rounded-md"
-                    value=""
-                    onChange={(event)=>setSortOption(event.target.value)}
-                >
-                    <option value="">Sort By</option>
-                    <option value="priceAsc">
-                        Price (low to high)
-                    </option>
-                    <option value="priceDesc">
-                        Price (high to low)
-                    </option>
+                <select
+                        className="p-2 border rounded-md"
+                        value={sortOption}
+                        onChange={(event) => setSortOption(event.target.value)}
+                    >
+                        <option value="">Sort By</option>
+                        <option value="priceAsc">Price (low to high)</option>
+                        <option value="priceDesc">Price (high to low)</option>
                 </select>
             </div>
 

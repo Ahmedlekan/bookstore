@@ -96,8 +96,6 @@ export const createPaymentIntent = async (cartItems: CartItemItemsProps[]) => {
     return url;
 };
 
-
-
 export const fetchBookById = async(bookId: string): Promise<BookType>=>{
     const response = await fetch(`${API_BASE_URL}/api/general/${bookId}`, {
         credentials: "include"

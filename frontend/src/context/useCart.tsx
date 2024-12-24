@@ -8,9 +8,13 @@ import { addToCart, updateCartQuantity, deleteCartItem } from '../apiClient/gene
 
 interface CartContextType {
     cartItems: CartItemItemsProps[];
-    addToCartHandler: (product: BookType) => Promise<void>;
+    addToCartHandler: (product: BookType, redirectToCheckout?: boolean) => Promise<boolean>;
     updateQuantityHandler: (bookId: string, quantity: number) => Promise<void>;
     deleteCartItemHandler: (bookId: string) => Promise<void>;
+
+    favoriteItems: BookType[];
+    toggleFavorite: (product: BookType) => void;
+    isFavorite: (productId: string) => boolean
 }
 
 // Define props for CartProvider
@@ -24,6 +28,7 @@ const CartContext = createContext<CartContextType | null>(null);
 // CartProvider component
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const [cartItems, setCartItems] = useState<CartItemItemsProps[]>([]);
+    const [favoriteItems, setFavoriteItems] = useState<BookType[]>([]);
     const { showToast } = useAppContext();
 
     // Fetch initial cart items
@@ -39,7 +44,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         }
     }, [fetchedCartItems]);
 
-    const addToCartHandler = async (book: BookType) => {
+    const addToCartHandler = async (book: BookType, redirectToCheckout = false): Promise<boolean> => {
         try {
 
             // Check if the book is already in the cart
@@ -47,7 +52,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
             if (existingItem) {
                 showToast({ message: "Book already in cart", type: "ERROR" });
-                return; // Exit early if the book is already in the cart
+                return false
             }
             
             // Add book to the cart
@@ -66,9 +71,17 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
             setCartItems((prevItems) => [...prevItems, newItem]);
             showToast({ message: "Book added to cart", type: "SUCCESS" });
 
+            if (redirectToCheckout) {
+                window.location.href = "/checkout";
+            }
+
+            return true
+
             } catch (error) {
                 console.error(error); 
                 showToast({ message: "Failed to add a book to cart", type: "ERROR" });
+
+                return false
             }
         };
 
@@ -100,13 +113,40 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         }
     };
 
+
+    // Load favorite items from localStorage on initial load
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem('favoriteItems');
+        if (savedFavorites) {
+            setFavoriteItems(JSON.parse(savedFavorites));
+        }
+    }, []);
+
+    const toggleFavorite = (book: BookType) => {
+        setFavoriteItems((prevFavorites) => {
+            const isAlreadyFavorite = prevFavorites.some(item => item._id === book._id);
+            const updatedFavorites = isAlreadyFavorite
+                ? prevFavorites.filter(item => item._id !== book._id)
+                : [...prevFavorites, book];
+
+                localStorage.setItem('favoriteItems', JSON.stringify(updatedFavorites));
+
+            return updatedFavorites
+        });
+    };
+
+    const isFavorite = (bookId: string) => favoriteItems.some(item => item._id === bookId);
+
     return (
         <CartContext.Provider 
             value={{ 
                 cartItems, 
                 addToCartHandler, 
                 updateQuantityHandler, 
-                deleteCartItemHandler ,
+                deleteCartItemHandler,
+                toggleFavorite,
+                isFavorite,
+                favoriteItems, 
             }}
         >
             {children}

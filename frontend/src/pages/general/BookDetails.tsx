@@ -4,17 +4,29 @@ import { useQuery } from "@tanstack/react-query";
 import * as generalApiClient from "../../apiClient/general"
 import Loading from "../../components/ui/Loading";
 import { useCartContext } from "../../context/useCart";
+import { useAppContext } from "../../context/useAppContext";
 
 const BookDetails = () => {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const {bookId} = useParams<{ bookId: string }>()
-  const {addToCartHandler} = useCartContext()
+  const {addToCartHandler, toggleFavorite, isFavorite} = useCartContext()
+  const {showToast} = useAppContext()
 
   const {data : book, isLoading, isError} = useQuery({
       queryKey:["fetchBookById", bookId],
       queryFn: ()=> generalApiClient.fetchBookById(bookId || ""),
       enabled: !!bookId,
   })
+
+  const handleFavorites = () => {
+    if (!book) return; // Ensure `book` exists
+    if (isFavorite(book._id)) {
+      showToast({ message: "Already in Favorites", type: "ERROR" });
+    } else {
+      toggleFavorite(book);
+      showToast({ message: "Added to Favorites", type: "SUCCESS" });
+    }
+  };
 
   // Handle loading state
   if (isLoading) {
@@ -81,7 +93,7 @@ if (!activeImage && book.imageUrls && book.imageUrls.length > 0) {
             </button>
             <button
               className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition"
-              onClick={() => alert("Added to Favorites")}
+              onClick={handleFavorites}
             >
               Add to Favorites ❤️
             </button>
