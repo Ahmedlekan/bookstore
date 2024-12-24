@@ -5,7 +5,6 @@ import Cart from "../models/cart"
 import { BookFilterResponse } from "../types/types"
 import mongoose from "mongoose"
 
-
 const router =  express.Router();
 
 //book filter
@@ -45,8 +44,8 @@ router.get("/search", async (req:Request, res:Response)=>{
         res.json(response)
 
     } catch (error) {
-        console.log("error", error)
-        res.status(500).json({message: "Something went wrong"})
+        console.error("Error in search API:", error);
+        res.status(500).json({ message: "Something went wrong" });
     }
 })
 
@@ -244,13 +243,16 @@ router.delete("/delete-cart-item", async (req:Request, res:Response) => {
 });
 
 
+// Query construction helper function
+
 const constructSearchQuery = (queryParams: any)=>{
     let constructedQuery: any = {};
 
+    // Check if a search term (e.g., product name) is provided
     if (queryParams.searchTerm) {
         constructedQuery = {
             $or: [
-                { title: { $regex: queryParams.searchTerm, $options: 'i' } },  // case-insensitive search on book title
+                { title: { $regex: queryParams.searchTerm, $options: 'i' } },  // case-insensitive search on product title
                 { description: { $regex: queryParams.searchTerm, $options: 'i' } },  // case-insensitive search on description
                 { tags: { $regex: queryParams.searchTerm, $options: 'i' } }  // case-insensitive search on tags
             ]
@@ -264,7 +266,7 @@ const constructSearchQuery = (queryParams: any)=>{
                 : [queryParams.category]
         };
     }
-
+    
     if(queryParams.maxPrice){
         constructedQuery.price = {
             $lte: parseInt(queryParams.maxPrice).toString(),
@@ -272,6 +274,7 @@ const constructSearchQuery = (queryParams: any)=>{
     }
 
     return constructedQuery;
+
 }
 
 
