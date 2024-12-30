@@ -34,6 +34,12 @@ router.post(
                 return
             }
 
+            // Check if the password exists (non-Google users)
+            if (!user.password) {
+                res.status(400).json({ message: "Invalid Credentials" });
+                return;
+            }
+
             // Check password
             const isPasswordValid = await bcrypt.compare(password, user.password);
             

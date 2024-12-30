@@ -16,10 +16,14 @@ export interface BookType {
   trending?: boolean;
 }
 
-export interface UserType {
-    username: string;
-    email: string;
-    password: string;
+export type UserType = {
+  name: string;
+  email: string;
+  password?: string;
+  googleId?: string; // Google ID for users signing in with Google
+  profilePicture?: string; // URL to the user's profile picture
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type BookFilterResponse = {

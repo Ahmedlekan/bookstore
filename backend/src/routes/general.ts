@@ -17,11 +17,14 @@ router.get("/search", async (req:Request, res:Response)=>{
 
         switch(req.query.sortOption){
             case "priceAsc":
-                sortOptions = {price: 1}
+                sortOptions = {newPrice: 1}
                 break
             case "priceDesc":
-                sortOptions = {price: -1}
+                sortOptions = {newPrice: -1}
                 break
+            default:
+                sortOptions = {};
+                break;
         }
 
         const pageSize = 6
@@ -30,6 +33,7 @@ router.get("/search", async (req:Request, res:Response)=>{
         
         // list all the books from the data base
         const books = await Book.find(query).sort(sortOptions).skip(skip).limit(pageSize)
+        console.log("Books Retrieved:", books);
         const total = await Book.countDocuments(query)
         // return the resposnse to the front end with its pagination
         const response: BookFilterResponse = {
@@ -245,37 +249,27 @@ router.delete("/delete-cart-item", async (req:Request, res:Response) => {
 
 // Query construction helper function
 
-const constructSearchQuery = (queryParams: any)=>{
+const constructSearchQuery = (queryParams: any) => {
     let constructedQuery: any = {};
 
-    // Check if a search term (e.g., product name) is provided
-    if (queryParams.searchTerm) {
-        constructedQuery = {
-            $or: [
-                { title: { $regex: queryParams.searchTerm, $options: 'i' } },  // case-insensitive search on product title
-                { description: { $regex: queryParams.searchTerm, $options: 'i' } },  // case-insensitive search on description
-                { tags: { $regex: queryParams.searchTerm, $options: 'i' } }  // case-insensitive search on tags
-            ]
+    // Filter by categories only if categories are provided
+    if (queryParams.categories && queryParams.categories.length > 0) {
+        constructedQuery.categories = {
+            $in: Array.isArray(queryParams.categories)
+                ? queryParams.categories
+                : [queryParams.categories], // Ensure it's an array
         };
     }
 
-    if (queryParams.category) {
-        constructedQuery.category = {
-            $in: Array.isArray(queryParams.category)
-                ? queryParams.category
-                : [queryParams.category]
+    // Filter by max price
+    if (queryParams.maxPrice) {
+        constructedQuery.newPrice = {
+            $lte: parseFloat(queryParams.maxPrice), // Parse the price to a number
         };
     }
-    
-    if(queryParams.maxPrice){
-        constructedQuery.price = {
-            $lte: parseInt(queryParams.maxPrice).toString(),
-        }
-    }
 
+    console.log("Constructed Query:", constructedQuery); // Debugging
     return constructedQuery;
-
-}
-
+};
 
 export default router

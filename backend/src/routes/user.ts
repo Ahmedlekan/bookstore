@@ -30,7 +30,7 @@ router.get("/me", verifyToken, async (req:Request, res: Response)=>{
 
 // /api/users/signUp
 router.post("/register", [
-    check("username", "Username is required").isString(),
+    check("name", "Username is required").isString(),
     check("email", "Email is required").isEmail(),
     check("password", "password with 6 or more character required").isLength({min: 6})
 ], async (req: Request, res: Response) => {
@@ -62,7 +62,6 @@ router.post("/register", [
 
         const payload = {
             ...req.body,
-            role : "GENERAL",
             password : hashPassword
         }
 
