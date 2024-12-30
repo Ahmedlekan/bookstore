@@ -23,7 +23,7 @@ export const signIn = async (formData: LoginFormDataprops) => {
       throw new Error(body.message);
     }
     return body;
-  };
+};
 
   // validate token
 export const validateToken = async ()=>{

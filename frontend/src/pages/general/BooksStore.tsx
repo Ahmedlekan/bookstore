@@ -13,17 +13,17 @@ const BooksStore = () => {
     const [page, setPage] = useState<number>(1)
     const [sortOption, setSortOption] = useState<string>("");
     const [selectedPrice, setSelectedPrice] = useState<number | undefined>();
-    const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [selectedBook, setSelectedBook] = useState<BookType | null>(null);
-    const [title, setTitle] = useState<string>("")
 
     const searchParams = {
-        title: title,
         page: page.toString(),
-        category: selectedCategory,
+        categories: selectedCategories, // Pass categories here
         maxPrice: selectedPrice?.toString(),
         sortOption
-      }
+    }
+
+    console.log("Search Params:", searchParams); // Debugging
 
     const {data: book, isLoading, isError} = useQuery({
     queryKey:["searchBooks", searchParams],
@@ -34,7 +34,7 @@ const BooksStore = () => {
     const categoryTypesChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
         const categoryType = event.target.value
 
-        setSelectedCategory((prevTypes) =>
+        setSelectedCategories((prevTypes) =>
             event.target.checked
             ? [...prevTypes, categoryType]
             : prevTypes.filter((type)=> type !== categoryType)
@@ -42,11 +42,10 @@ const BooksStore = () => {
     }
 
     const handleResetFilters = () => {
-        setSelectedCategory([]);
+        setSelectedCategories([]);
         setSelectedPrice(undefined);
         setSortOption("");
         setPage(1);
-        setTitle("")
     };
 
     if (isLoading){
@@ -65,7 +64,7 @@ const BooksStore = () => {
                     Filter By:
                 </h3>
                 <SearhCartFilter
-                    selectedCategory={selectedCategory}
+                    selectedCategories={selectedCategories}
                     onChange={categoryTypesChange}
                 />
                 

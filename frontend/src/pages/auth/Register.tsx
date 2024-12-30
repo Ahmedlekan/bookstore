@@ -55,13 +55,13 @@ const Register = () => {
 
             <form className="flex flex-col gap-5 font-body" onSubmit={onSubmit}>
                 <label className="text-gray-700 text-sm font-bold">
-                        Username
+                        Name
                         <input 
                             className="border rounded w-full py-1 px-2 font-normal"
-                            {...register("username", {required:"This field is required"})}
+                            {...register("name", {required:"This field is required"})}
                         />
-                        {errors.username && (
-                            <span className="text-red-500">{errors.username.message}</span>
+                        {errors.name && (
+                            <span className="text-red-500">{errors.name.message}</span>
                         )}
                 </label>
 

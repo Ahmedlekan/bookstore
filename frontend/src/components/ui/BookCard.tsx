@@ -32,7 +32,8 @@ const BookCard = ({ book, onQuickView }: BookCardProps) => {
 
   const handleFavorites = () => {
     if (isFavorite(book._id)) {
-      showToast({message:"Already in Favorites", type: "ERROR"})
+      toggleFavorite(book);
+      showToast({message:"Removed from Favorites", type: "ERROR"})
     } else {
       toggleFavorite(book);
       showToast({message:"Added to Favorites", type: "SUCCESS"})

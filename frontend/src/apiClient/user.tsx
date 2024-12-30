@@ -4,7 +4,7 @@ import { UserType } from "../../../backend/src/types/types"
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""
 
 export type RegisterFormDataprops = {
-    username: string
+    name: string
     email: string;
     password: string;
     confirmPassword: string;

@@ -5,33 +5,33 @@ import { CartItemItemsProps } from "../../../backend/src/types/types";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ""
 
 export type SearchParams = {
-    title?: string;
-    category?: string[]
+    categories?: string[]
     page?: string;
     maxPrice?: string;
     sortOption?: string;
 };
 
-export const searchBooks = async (searchParams : SearchParams) : Promise<BookFilterResponse> =>{
-    // create new url params object
-    const queryParams = new URLSearchParams()
+export const searchBooks = async (searchParams: SearchParams): Promise<BookFilterResponse> => {
+    const queryParams = new URLSearchParams();
 
-    // Only append if values exist
-    if (searchParams.title) queryParams.append("searchTerm", searchParams.title);
     if (searchParams.page) queryParams.append("page", searchParams.page);
     if (searchParams.sortOption) queryParams.append("sortOption", searchParams.sortOption);
     if (searchParams.maxPrice) queryParams.append("maxPrice", searchParams.maxPrice);
 
-    searchParams.category?.forEach((cat)=> queryParams.append("category", cat))
-    
-    const response = await fetch(`${API_BASE_URL}/api/general/search?${queryParams}`)
-
-    if (!response.ok){
-        throw new Error("Error fetching books")
+    // Only add categories if the array is not empty
+    if (searchParams.categories?.length) {
+        searchParams.categories.forEach((category) => queryParams.append("categories", category));
     }
 
-    return response.json()
-}
+    console.log("Query Params:", queryParams.toString()); // Debugging
+
+    const response = await fetch(`${API_BASE_URL}/api/general/search?${queryParams}`);
+    if (!response.ok) {
+        throw new Error("Error fetching books");
+    }
+
+    return response.json();
+};
 
 export const fetchAllBooks = async (): Promise<BookType[]>=>{
     const response = await fetch(`${API_BASE_URL}/api/general/general-books`, {

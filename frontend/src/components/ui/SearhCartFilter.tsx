@@ -3,11 +3,11 @@ import { category } from '../../constants/data'
 
 
 type SearhCartFilterProps = {
-  selectedCategory: string[]
+  selectedCategories: string[]
   onChange: (event: React.ChangeEvent<HTMLInputElement>)=> void
 }
 
-const SearhCartFilter = ({selectedCategory, onChange}: SearhCartFilterProps) => {
+const SearhCartFilter = ({selectedCategories, onChange}: SearhCartFilterProps) => {
   return (
     <div className="space-y-5">
       {/* Category Filter */}
@@ -19,7 +19,7 @@ const SearhCartFilter = ({selectedCategory, onChange}: SearhCartFilterProps) => 
               type="checkbox"
               className="rounded"
               value={cat.label}
-              checked={selectedCategory.includes(cat.label)}
+              checked={selectedCategories.includes(cat.label)}
               onChange={onChange}
             />
             <span>{cat.label}</span>
