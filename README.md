@@ -18,3 +18,37 @@
 <h1 align="center">📚 MERN Bookstore</h1>
 
 A full-stack bookstore application built using the MERN stack (MongoDB, Express.js, React, Node.js). This project allows users to browse, search, and purchase books online with authentication, cart management, and an admin dashboard for managing inventory.
+
+
+## 🚀 Features
+
+✅ User authentication (JWT-based login/register)
+✅ Browse & search for books by title, author, or category
+✅ Add to cart & checkout with secure payments
+✅ Admin dashboard to manage books & orders
+✅ Responsive UI for seamless experience
+
+## 🛠️ Tech Stack
+
+- Frontend: React, Tansquery, Tailwind CSS
+- Backend: Node.js, Express.js, MongoDB
+- Authentication: JWT, bcrypt
+- Payment Integration: Stripe
+- Deployment: Render
+
+## 🔧 Installation
+
+Clone the repo and install dependencies:
+git clone https://github.com/yourusername/mern-bookstore.git
+cd bookstore
+npm install
+cd frontend && npm install
+Run backend & frontend:
+npm run dev
+
+## 🎯 Future Improvements
+Wishlist & book reviews
+Advanced search & filtering
+User roles & permissions
+
+💡 Contributions & Feedback Welcome!
