@@ -3,6 +3,11 @@
        <img width="943" alt="Image" src="https://github.com/user-attachments/assets/d2e88701-7d07-42af-8b53-04224f191ed3" alt="Project Banner"/>
     </a>
   <br />
+  
+  <br />
+       <img width="952" alt="Image" src="https://github.com/user-attachments/assets/8c711123-1b47-4575-8a6a-ffe3dcbbb559" alt="Backend Dashboard" />
+    </a>
+  <br />
 
   <div>
     <img src="https://img.shields.io/badge/-Framer-black?style=for-the-badge&logoColor=white&logo=framer&color=0055FF" alt="framer" />
