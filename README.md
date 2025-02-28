@@ -23,9 +23,13 @@ A full-stack bookstore application built using the MERN stack (MongoDB, Express.
 ## 🚀 Features
 
 ✅ User authentication (JWT-based login/register)
+
 ✅ Browse & search for books by title, author, or category
+
 ✅ Add to cart & checkout with secure payments
+
 ✅ Admin dashboard to manage books & orders
+
 ✅ Responsive UI for seamless experience
 
 ## 🛠️ Tech Stack
@@ -36,19 +40,41 @@ A full-stack bookstore application built using the MERN stack (MongoDB, Express.
 - Payment Integration: Stripe
 - Deployment: Render
 
-## 🔧 Installation
+**Prerequisites**
 
-Clone the repo and install dependencies:
-git clone https://github.com/yourusername/mern-bookstore.git
+Make sure you have the following installed on your machine:
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
+
+
+**Cloning the Repository**
+
+```bash
+git clone https://github.com/adrianhajdin/portfolio.git
 cd bookstore
+```
+
+**Installation**
+
+Install the project dependencies using npm:
+
+```bash
 npm install
-cd frontend && npm install
-Run backend & frontend:
+```
+
+**Running the Project**
+
+```bash
 npm run dev
+```
+
 
 ## 🎯 Future Improvements
-Wishlist & book reviews
-Advanced search & filtering
-User roles & permissions
+
+- Wishlist & book reviews
+- Advanced search & filtering
+- User roles & permissions
 
 💡 Contributions & Feedback Welcome!
