@@ -17,7 +17,7 @@
 
 <h1 align="center">📚 MERN Bookstore</h1>
 
-A full-stack bookstore application built using the MERN stack (MongoDB, Express.js, React, Node.js). This project allows users to browse, search, and purchase books online with authentication, cart management, and an admin dashboard for managing inventory.
+A full-stack bookstore application built using the MERN stack (MongoDB, Express.js, React, Node.js). This project allows users to browse, search, and purchase books online with authentication, cart management, and an admin dashboard for managing inventor.
 
 
 ## 🚀 Features
@@ -52,7 +52,7 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/adrianhajdin/portfolio.git
+git clone https://github.com/Ahmedlekan/bookstore.git
 cd bookstore
 ```
 
@@ -73,8 +73,10 @@ npm run dev
 
 ## 🎯 Future Improvements
 
-- Wishlist & book reviews
-- Advanced search & filtering
-- User roles & permissions
+Wishlist & book reviews
+
+Advanced search & filtering
+
+User roles & permissions
 
 💡 Contributions & Feedback Welcome!
