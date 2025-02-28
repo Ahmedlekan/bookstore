@@ -13,7 +13,7 @@
     <img src="https://img.shields.io/badge/-Node.js-black?style=for-the-badge&logoColor=white&logo=node.js&color=339933" alt="node.js" />
     <img src="https://img.shields.io/badge/-TanStack_Query-black?style=for-the-badge&logoColor=white&logo=reactquery&color=FF4154" alt="tanstack-query" />
   </div>
-
-  <h3 align="center">A Modern Full Stack Project</h3>
-  
 </div>
+
+# 📚 MERN Bookstore
+A full-stack bookstore application built using the MERN stack (MongoDB, Express.js, React, Node.js). This project allows users to browse, search, and purchase books online with authentication, cart management, and an admin dashboard for managing inventory.
