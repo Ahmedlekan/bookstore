@@ -1,14 +1,15 @@
 import express, {Request, Response} from "express"
 import cors from "cors"
 import "dotenv/config"
+import * as path from "path";
 import cookierParser from "cookie-parser"
 import mongoose from "mongoose"
-import userRoutes from "../src/routes/user"
-import adminRoutes from "../src/routes/admin"
-import generalRoutes from "../src/routes/general"
-import authRoutes from "../src/routes/auth"
-import googleAuthRoutes from "../src/routes/googleauth"
-import stripeRoutes from "../src/routes/stripe"
+import userRoutes  from "./routes/user"
+import adminRoutes from "./routes/admin"
+import generalRoutes from "./routes/general"
+import authRoutes from "./routes/auth"
+import googleAuthRoutes from "./routes/googleauth"
+import stripeRoutes from "./routes/stripe"
 
 import {v2 as cloudinary} from 'cloudinary';
 
@@ -34,6 +35,8 @@ app.use(cors({
     ]
 }))
 
+const pathToDist = path.join(__dirname, "../../frontend/dist");
+app.use(express.static(pathToDist));
 
 // Define a route for the root path
 app.get("/", (req: Request, res: Response) => {
@@ -45,6 +48,11 @@ app.use("/api/general", generalRoutes)
 app.use("/api/auth", authRoutes)
 app.use("/api/google-signin", googleAuthRoutes)
 app.use("/api/stripe", stripeRoutes)
+
+app.get("*", (req: Request, res: Response) => {
+    res.sendFile(path.join(pathToDist, "index.html"));
+});
+
 
 app.listen(7000, ()=>{
     console.log("Server running on localhost:7000")
