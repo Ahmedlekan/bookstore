@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { FaGoogle } from "react-icons/fa";
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+// import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { useAppContext } from '../../context/useAppContext';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
@@ -11,11 +11,11 @@ const SignIn = () => {
 
     const {register, handleSubmit, formState:{errors}} = useForm<LoginFormDataprops>()
     const queryClient = useQueryClient()
-    const {showToast, signInWithGoogle} = useAppContext()
+    const {showToast} = useAppContext()
     const navigate = useNavigate()
-    // const location = useLocation();
+    const location = useLocation();
 
-    // const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/";
 
     const mutation = useMutation({
         mutationFn: authApiClient.signIn,
@@ -32,20 +32,20 @@ const SignIn = () => {
     const onSubmit = handleSubmit((data)=>{
         mutation.mutate(data)
 
-    //     // Redirect to the intended page after login
-    // navigate(from, { replace: true });
+        // Redirect to the intended page after login
+        navigate(from, { replace: true });
     })
 
-    const handleGoogleSignIn = async() => {
-        try {
-            await signInWithGoogle();
-            showToast({message:"Login Success!", type: "SUCCESS"})
-            navigate("/")
-        } catch (error) {
-            showToast({ message: "Failed to sign in with Google", type: "ERROR" })
-            console.error(error)
-        }
-    }
+    // const handleGoogleSignIn = async() => {
+    //     try {
+    //         await signInWithGoogle();
+    //         showToast({message:"Login Success!", type: "SUCCESS"})
+    //         navigate("/")
+    //     } catch (error) {
+    //         showToast({ message: "Failed to sign in with Google", type: "ERROR" })
+    //         console.error(error)
+    //     }
+    // }
     
   return (
     <div className='h-[100vh] flex justify-center
@@ -105,7 +105,7 @@ const SignIn = () => {
             </p>
 
             {/* google sign in */}
-            <div className='mt-4'>
+            {/* <div className='mt-4'>
                 <button 
                     onClick={handleGoogleSignIn}
                     className='w-full flex flex-wrap gap-1 items-center
@@ -116,7 +116,7 @@ const SignIn = () => {
                     <FaGoogle  className='mr-2'/>
                     Sign in with Google
                 </button>
-            </div>
+            </div> */}
 
             <p className='mt-5 text-center text-gray-500
                 text-xs font-body'>

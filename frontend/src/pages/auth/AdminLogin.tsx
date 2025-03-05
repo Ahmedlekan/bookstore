@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form"
-import { useState } from "react"
-
-import { useNavigate } from 'react-router-dom'
+// import { useState } from "react"
 
 const AdminLogin = () => {
-    const [message, setMessage] = useState("")
+    // const [message, setMessage] = useState("")
     const {register} = useForm()
 
       
@@ -73,11 +71,11 @@ const AdminLogin = () => {
                         py-2 px-3 leading-tight focus:outline-none focus:shadow'
                     />
                 </div>
-                {
+                {/* {
                     message && <p className='text-red-500 text-xs italic mb-3'>
                         {message}
                     </p>
-                }
+                } */}
                 <div className='w-full'>
                     <button className='bg-blue-500 w-full hover:bg-blue-700 
                     text-white font-bold py-2 px-8 rounded

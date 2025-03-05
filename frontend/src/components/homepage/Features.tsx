@@ -8,7 +8,7 @@ const features = [
   {
     icon: "🔒", // Replace with your actual SVG or image icon
     title: "SECURE PAYMENT",
-    description: "100% Secure Payment",
+    description: "Secure Payment",
   },
   {
     icon: "🏷️", // Replace with your actual SVG or image icon
@@ -35,15 +35,15 @@ const Features: React.FC = () => {
               className="flex flex-col md:flex-row items-center gap-4"
             >
               {/* Icon */}
-              <div className="text-4xl">{feature.icon}</div>
+              <div className="text-2xl md:text-4xl">{feature.icon}</div>
 
               <div className=" flex flex-col gap-2">
                 {/* Title */}
-                <h3 className="font-bold text-lg text-gray-800 font-display">
+                <h3 className="font-bold text-sm text-nowrap md:text-lg text-gray-800 font-display">
                   {feature.title}
                 </h3>
                 {/* Description */}
-                <p className="text-sm text-gray-600 font-body font-semibold">{feature.description}</p>
+                <p className="text-xs md:text-sm text-gray-600 font-body font-semibold">{feature.description}</p>
               </div>
             </div>
           ))}

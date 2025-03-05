@@ -4,8 +4,6 @@ import { UserType } from '../../../backend/src/types/types'
 import { useQuery } from '@tanstack/react-query'
 import * as authApiClient from "../apiClient/auth"
 import * as userApiClient from "../apiClient/user"
-import { auth } from "../firebase/firebase.config"
-import { GoogleAuthProvider, signInWithPopup, UserCredential} from "firebase/auth";
 
 type ToastMessage = {
     message: string;
@@ -17,8 +15,7 @@ type AppContextProps = {
     user: UserType | null;
     setUser: (user: UserType | null) => void;
     isLoggedIn: boolean
-    isLoading: boolean
-    signInWithGoogle: () => Promise<UserCredential>;
+    isLoading: boolean;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined)
@@ -26,7 +23,8 @@ const AppContext = createContext<AppContextProps | undefined>(undefined)
 export const AppContextProvider = ({children}:{children: React.ReactNode}) => {
     const [toast, setToast] = useState<ToastMessage | undefined>(undefined)
     const [user, setUser] = useState<UserType | null>(null);
-    const googleProvider = new GoogleAuthProvider();
+    
+
 
     const {isError} = useQuery({
         queryKey: ["validateToken"],
@@ -47,14 +45,14 @@ export const AppContextProvider = ({children}:{children: React.ReactNode}) => {
     }, [currentUser, isSuccess, isError]);
 
     // sing up with google
-    const signInWithGoogle = async (): Promise<UserCredential> => {
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        return result; // This is a UserCredential object
-      } catch{
-        throw new Error("Failed to sign in with Google");
-      }
-    };
+    // const signInWithGoogle = async (): Promise<UserCredential> => {
+    //   try {
+    //     const result = await signInWithPopup(auth, googleProvider);
+    //     return result; // This is a UserCredential object
+    //   } catch{
+    //     throw new Error("Failed to sign in with Google");
+    //   }
+    // };
 
   return (
     <AppContext.Provider value={{
@@ -63,7 +61,6 @@ export const AppContextProvider = ({children}:{children: React.ReactNode}) => {
         setUser,
         isLoggedIn: !isError,
         isLoading,
-        signInWithGoogle
     }}>
         {toast && (
             <Toast message={toast.message} type={toast.type} onClose={ () => setToast(undefined)} />

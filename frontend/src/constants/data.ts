@@ -96,8 +96,8 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const navigation = [
-  {name: "Dashboard", href:"/user-dashboard"},
-  {name: "Orders", href:"/orders"},
+  {name: "Dashboard", href:"/#"},
+  {name: "Orders", href:"/#"},
   {name: "Check Out", href:"/checkout"},
 ]
 

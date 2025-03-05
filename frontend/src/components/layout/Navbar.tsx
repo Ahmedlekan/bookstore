@@ -1,5 +1,5 @@
 import { FiSearch, FiShoppingBag} from "react-icons/fi";
-import { HiOutlineUser } from "react-icons/hi";
+// import { HiOutlineUser } from "react-icons/hi";
 import { Sheet } from "../ui/Sheet";
 import { useState } from "react";
 import book1 from "../../assets/book1.jpg"
@@ -19,7 +19,7 @@ const Navbar = () => {
     const  [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [openCartSheet, setOpenCartSheet] = useState(false);
-    const [token, setToken] = useState(false)
+    // const [token, setToken] = useState(false)
     const {showToast, setUser, isLoggedIn} = useAppContext()
     const {cartItems} = useCartContext()
     const queryClient = useQueryClient()
@@ -177,16 +177,7 @@ const Navbar = () => {
                         </div>
                       )
                     }
-                    </> : token ?  (
-                      <Link to="/dashboard"
-                        className='border-b-2 border-primary'>
-                        Dashboard
-                      </Link>
-                    ) : (
-                        <Link to="/signin">
-                          <HiOutlineUser className="size-6"/>
-                        </Link>
-                    )
+                    </> : <></>
                   }
               </div>
 
@@ -260,3 +251,17 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+
+
+
+// token ?  (
+//   <Link to="/dashboard"
+//     className='border-b-2 border-primary'>
+//     Dashboard
+//   </Link>
+// ) : (
+//     <Link to="/signin">
+//       <HiOutlineUser className="size-6"/>
+//     </Link>
+// )

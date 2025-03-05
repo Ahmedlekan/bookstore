@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaGoogle } from "react-icons/fa";
+// import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { RegisterFormDataprops } from '../../apiClient/user';
 import { useAppContext } from '../../context/useAppContext';
@@ -8,10 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import * as userAapiClient from "../../apiClient/user"
 
 
-
 const Register = () => {
     const {register, watch, handleSubmit, formState:{errors}} = useForm<RegisterFormDataprops>()
-    const {showToast, signInWithGoogle} = useAppContext()
+    const {showToast} = useAppContext()
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
@@ -31,16 +30,16 @@ const Register = () => {
         mutation.mutate(data)
     })
 
-    const handleGoogleSignIn = async() => {
-        try {
-            await signInWithGoogle();
-            showToast({message:"Login Success!", type: "SUCCESS"})
-            navigate("/")
-        } catch (error) {
-            showToast({ message: "Failed to sign in with Google", type: "ERROR" })
-            console.error(error)
-        }
-    }
+    // const handleGoogleSignIn = async() => {
+    //     try {
+    //         await signInWithGoogle();
+    //         showToast({message:"Login Success!", type: "SUCCESS"})
+    //         navigate("/")
+    //     } catch (error) {
+    //         showToast({ message: "Failed to sign in with Google", type: "ERROR" })
+    //         console.error(error)
+    //     }
+    // }
 
   return (
     <div className='h-[100vh] flex justify-center
@@ -131,7 +130,7 @@ const Register = () => {
             </p>
 
             {/* google sign in */}
-            <div className='mt-4'>
+            {/* <div className='mt-4'>
                 <button 
                     onClick={handleGoogleSignIn}
                     className='w-full flex flex-wrap gap-1 items-center
@@ -141,7 +140,7 @@ const Register = () => {
                     <FaGoogle  className='mr-2'/>
                     Sign in with Google
                 </button>
-            </div>
+            </div> */}
 
             <p className='mt-5 text-center text-gray-500
                 text-xs font-body'>

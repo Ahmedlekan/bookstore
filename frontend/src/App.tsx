@@ -1,4 +1,5 @@
-import {BrowserRouter as Router,  Routes, Route } from "react-router-dom"
+import {BrowserRouter as Router,  Routes, Route,
+  useLocation, Outlet, Navigate } from "react-router-dom"
 import Layout from "./components/layout/Layout"
 import HomePage from "./pages/general/HomePage"
 import Register from "./pages/auth/Register"
@@ -13,6 +14,21 @@ import BookDetails from "./pages/general/BookDetails"
 import Favorites from "./pages/general/Favorites"
 // import Account from "./pages/general/Account"
 import Checkout from "./pages/general/Checkout"
+import { useAppContext } from "./context/useAppContext"
+
+
+const ProtectedRoute = () => {
+  const { isLoggedIn } = useAppContext();
+  const location = useLocation();
+
+  // Redirect unauthenticated users to the sign-in page
+  if (!isLoggedIn) {
+    return <Navigate to="/signin" state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
+};
+
 
 function App() {
 
@@ -27,18 +43,26 @@ function App() {
           <Route path="books-store" element={<BooksStore />} />
           <Route path="book/:bookId" element={<BookDetails />} />
           <Route path="favorites" element={<Favorites />} />
-          
-          <Route path="/checkout" element={<Checkout />} />
+
+            {/* Wrap protected routes with ProtectedRoute */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="checkout" element={<Checkout />} />
+            </Route>
         </Route>
 
         <Route path="adminlogin" element={<AdminLogin />} />
+          {/* Admin routes wrapped with ProtectedRoute */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="admindashboard" element={<DashBoardLayout />}>
+              <Route path="dashboard" element={<DashBoard />} />
+              <Route path="books" element={<Books />} />
+              <Route path="manage-books" element={<ManageBooks />} />
+            </Route>
+          </Route>
 
-        <Route path="admin" element={<DashBoardLayout />}>
-            <Route path="dashboard" element={<DashBoard />} />
-            <Route path="books" element={<Books />} />
-            <Route path="manage-books" element={<ManageBooks />} />
-        </Route>
-
+          {/* Redirect unknown routes to home */}
+          <Route path="*" element={<Navigate to="/" />} /> 
+      
       </Routes>
     </Router>
   )
