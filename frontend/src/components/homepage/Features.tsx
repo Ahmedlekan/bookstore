@@ -1,22 +1,22 @@
 import React from "react";
 const features = [
   {
-    icon: "✈️", // Replace with your actual SVG or image icon
+    icon: "✈️",
     title: "FREE SHIPPING",
     description: "Order over $100",
   },
   {
-    icon: "🔒", // Replace with your actual SVG or image icon
+    icon: "🔒",
     title: "SECURE PAYMENT",
     description: "Secure Payment",
   },
   {
-    icon: "🏷️", // Replace with your actual SVG or image icon
+    icon: "🏷️",
     title: "BEST PRICE",
     description: "Guaranteed Price",
   },
   {
-    icon: "📚", // Replace with your actual SVG or image icon
+    icon: "📚",
     title: "READ BOOKS ONLINE",
     description: "Over millions of books",
   },

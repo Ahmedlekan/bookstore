@@ -65,7 +65,7 @@ function CartWrapper({ setOpenCartSheet, cartItems }: CartWrapperProps) {
       : (
         <Button
             onClick={() => {
-              navigate("/product-category");
+              navigate("/books-store");
               setOpenCartSheet(false);
             }}
             className="w-full mt-6"

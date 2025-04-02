@@ -1,5 +1,6 @@
 import React from "react";
 import bookbg1 from "../../assets/bookbg1.png"
+import { motion} from 'framer-motion';
 
 const BookFestival: React.FC = () => {
   return (
@@ -26,12 +27,15 @@ const BookFestival: React.FC = () => {
         <p className="text-lg md:text-xl lg:text-2xl text-gray-700 font-body">
           All Books are 50% Off
         </p>
-        <button className="px-4 py-2 md:px-6 md:py-3 font-medium
-            text-white bg-black font-body rounded-md 
-            hover:bg-black/80 transition-colors"
+        <motion.a href="/books-store"
+          className="bg-black font-semibold font-body
+          text-white py-3 px-6 rounded-lg hover:bg-rose-400
+            transition-colors"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          Shop Now
-        </button>
+          SHOP NOW
+        </motion.a>
       </div>
     </div>
   );

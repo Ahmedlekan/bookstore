@@ -1,9 +1,9 @@
-import { FiSearch, FiShoppingBag} from "react-icons/fi";
-// import { HiOutlineUser } from "react-icons/hi";
+import { FiSearch, FiShoppingBag, FiX } from "react-icons/fi";
+import { motion} from 'framer-motion';
 import { Sheet } from "../ui/Sheet";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import book1 from "../../assets/book1.jpg"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Avatar from "../../assets/avatar.png"
 import { menuItems } from "../../constants/data";
 import { navigation } from "../../constants/data";
@@ -19,10 +19,15 @@ const Navbar = () => {
     const  [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [openCartSheet, setOpenCartSheet] = useState(false);
-    // const [token, setToken] = useState(false)
     const {showToast, setUser, isLoggedIn} = useAppContext()
     const {cartItems} = useCartContext()
     const queryClient = useQueryClient()
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [showSearch, setShowSearch] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
 
     const mutation = useMutation({
       mutationFn: authClient.signOut,
@@ -39,6 +44,38 @@ const Navbar = () => {
   const handleClick = ()=>{
       mutation.mutate()
   }
+
+  const handleMouseEnter = (label: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setActiveMenu(label);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 200);
+  };
+
+  // Focus search input when search is shown
+  useEffect(() => {
+    if (showSearch && searchInputRef.current) {
+        searchInputRef.current.focus();
+    }
+  }, [showSearch]);
+
+  // Handle search submission
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+        navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+        setSearchQuery("");
+        setShowSearch(false);
+    }
+  };
+
+
+
+
 
   return (
     <nav className="bg-white shadow-md relative z-50">
@@ -65,8 +102,8 @@ const Navbar = () => {
             <li 
               key={index} 
               className="relative group"
-              onMouseEnter={() => setActiveMenu(item.label)}
-              onMouseLeave={() => setActiveMenu(null)}
+              onMouseEnter={() => handleMouseEnter(item.label)} 
+              onMouseLeave={handleMouseLeave}
             >
               <Link to={item.link || "#"} className="flex items-center text-lg font-display
                 font-semibold space-x-1"
@@ -76,6 +113,7 @@ const Navbar = () => {
               </Link>
               
               {/* Dropdown/Mega Menu */}
+              
               {(item.subItems || item.isMegaMenu) && activeMenu === item.label && (
                 <div className={`absolute left-0  bg-white shadow-lg mt-2 py-4
                   ${item.isMegaMenu ? 'flex flex-wrap justify-center' : 'block'}
@@ -123,6 +161,7 @@ const Navbar = () => {
                   )}
                 </div>
               )}
+
             </li>
           ))}
         </ul>
@@ -130,9 +169,46 @@ const Navbar = () => {
         {/* Icons and Mobile Menu Toggle */}
         <div className="flex items-center space-x-4">
           <div className="flex items-center gap-3">
-            <button className="hidden md:block p-1 bg-gray-800 text-white rounded-full">
-              <FiSearch />
+            
+          <div className="relative">
+        {showSearch ? (
+            <motion.form
+                onSubmit={handleSearch}
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 200 }}
+                exit={{ opacity: 0, width: 0 }}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white
+                shadow-md rounded-full overflow-hidden flex items-center"
+            >
+                <input
+                    type="text"
+                    ref={searchInputRef}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search books..."
+                    className="w-full px-4 py-2 outline-none"
+                />
+                <button 
+                    type="button"
+                    onClick={() => {
+                        setShowSearch(false);
+                        setSearchQuery("");
+                    }}
+                    className="px-2 text-gray-500 hover:text-gray-700"
+                >
+                    <FiX className="w-4 h-4" />
+                </button>
+            </motion.form>
+        ) : (
+            <button
+                onClick={() => setShowSearch(true)}
+                className="p-2 text-gray-700 hover:text-deepbrown transition-colors"
+                aria-label="Search"
+            >
+                <FiSearch className="w-5 h-5" />
             </button>
+        )}
+    </div>
             
             {/* rigth side */}
             <div className="relative flex items-center md:space-x-3 space-x-2">
@@ -198,9 +274,33 @@ const Navbar = () => {
                 <CartWrapper setOpenCartSheet={setOpenCartSheet}
                   cartItems={cartItems && cartItems.length > 0 ? cartItems : []}
                 />
-
               </Sheet>
-            
+
+              {
+                !isLoggedIn ? (
+                  <Link to="/signin"
+                className="relative p-2 text-gray-400 cursor-pointer 
+                  hover:bg-gray-100 hover:text-gray-600 
+                  focus:bg-gray-100 focus:text-gray-600 rounded-full"
+              >
+                <svg 
+                  aria-hidden="true" 
+                  fill="none"
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    strokeWidth="2" 
+                    d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" 
+                  />
+                </svg>
+              </Link>
+                ) : ('')
+              }
+
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -252,16 +352,3 @@ const Navbar = () => {
 
 export default Navbar
 
-
-
-
-// token ?  (
-//   <Link to="/dashboard"
-//     className='border-b-2 border-primary'>
-//     Dashboard
-//   </Link>
-// ) : (
-//     <Link to="/signin">
-//       <HiOutlineUser className="size-6"/>
-//     </Link>
-// )

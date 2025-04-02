@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { motion} from 'framer-motion';
 
 const NewsLetter = () => {
 
@@ -15,7 +15,6 @@ const NewsLetter = () => {
         alert(`Subscribed with ${email}`);
         setEmail("");
       };
-
 
   return (
     <section className="bg-gray-100 py-12 px-4 md:px-6 lg:px-20">
@@ -42,14 +41,16 @@ const NewsLetter = () => {
               rounded-md focus:outline-none focus:ring-2 focus:ring-deepbrown
               placeholder:text-gray-400"
           />
-          <button
+          <motion.button
             type="submit"
             className="w-full sm:w-32 bg-black text-white px-6 py-3 
-              rounded-md hover:bg-gray-800 transition-colors duration-300
+              rounded-md hover:bg-rose-400 transition-colors duration-300
               font-medium font-body"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
           >
             Subscribe
-          </button>
+          </motion.button>
         </form>
       </div>
     </section>

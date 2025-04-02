@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion} from 'framer-motion';
 
 interface CategoryFilterProps {
   categories: string[]; // Array of categories
@@ -10,17 +11,19 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, activeCateg
   return (
     <div className="flex justify-center flex-wrap gap-2">
       {categories.map(category => (
-        <button
+        <motion.button
           key={category}
           className={`px-4 py-2 rounded-md text-sm font-medium transition ${
             activeCategory === category 
               ? 'bg-black font-semibold font-body text-white' 
-              : 'bg-gray-200 hover:bg-gray-300 text-gray-700 font-body'
+              : 'bg-gray-200 hover:bg-rose-400 text-gray-700 font-body'
           }`}
           onClick={() => onCategoryClick(category)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           {category}
-        </button>
+        </motion.button>
       ))}
     </div>
   );

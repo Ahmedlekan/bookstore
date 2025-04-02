@@ -4,7 +4,6 @@ import book2 from "../../assets/book2.png"
 import book3 from "../../assets/book3.png"
 import book4 from "../../assets/book4.png"
 
-
 interface BannerSlide {
     title: string;
     subtitle: string;
@@ -12,7 +11,6 @@ interface BannerSlide {
     buttonLabel: string;
     imageSrc: string;
   }
-
 
   const slides: BannerSlide[] = [
     {
@@ -39,33 +37,32 @@ interface BannerSlide {
   ];
 
 const Banner = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-    // Auto-slide logic
+  // Auto-slide logic
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000); // Change slide every 5 seconds
+  const interval = setInterval(() => {
+  setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, 5000); // Change slide every 5 seconds
 
-    return () => clearInterval(interval); // Clean up on component unmount
+  return () => clearInterval(interval); // Clean up on component unmount
   }, [slides.length]);
 
-    // Slide navigation handlers
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-      };
-    
-      const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-      };
+      // Slide navigation handlers
+  const nextSlide = () => {
+  setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
 
+  const prevSlide = () => {
+  setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   return (
     <div className="pb-10 relative w-full min-h-screen flex
         flex-col md:flex-row overflow-hidden z-10">
       {/* Content Section */}
       <motion.div 
-        className="w-full md:w-1/2 flex items-center justify-center 
+        className="ww-full md:w-1/2 flex items-center justify-center 
                     px-6 md:px-12 lg:px-20 z-10 py-12 md:py-0"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -110,7 +107,7 @@ const Banner = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {slides[currentSlide].buttonLabel}
+                <a href="/books-store">{slides[currentSlide].buttonLabel}</a>
               </motion.button>
             </motion.div>
           </AnimatePresence>
@@ -159,25 +156,6 @@ const Banner = () => {
           →
         </motion.button>
       </div>
-
-      {/* Slide Indicators */}
-      {/* <div className="absolute bottom-6 left-1/2 transform
-        -translate-x-1/2 flex space-x-2 z-50">
-        {slides.map((_, index) => (
-          <motion.div
-            key={index}
-            className={`w-2 h-2 rounded-full ${
-              index === currentSlide ? 'bg-rose-400' : 'bg-gray-300'
-            }`}
-            animate={{
-              scale: index === currentSlide ? 1.5 : 1,
-              backgroundColor: index === currentSlide ? '#f43f5e' : '#d1d5db'
-            }}
-            transition={{ duration: 0.3 }}
-            onClick={() => setCurrentSlide(index)}
-          />
-        ))}
-      </div> */}
     </div>
   )
 }

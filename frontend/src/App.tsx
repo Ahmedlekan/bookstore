@@ -12,10 +12,11 @@ import Books from "./pages/dashboard/Books"
 import BooksStore from "./pages/general/BooksStore"
 import BookDetails from "./pages/general/BookDetails"
 import Favorites from "./pages/general/Favorites"
+import ContactUs from "./pages/general/ContactUs"
 // import Account from "./pages/general/Account"
 import Checkout from "./pages/general/Checkout"
+import AboutUs from "./pages/general/AboutUs"
 import { useAppContext } from "./context/useAppContext"
-
 
 const ProtectedRoute = () => {
   const { isLoggedIn } = useAppContext();
@@ -43,6 +44,8 @@ function App() {
           <Route path="books-store" element={<BooksStore />} />
           <Route path="book/:bookId" element={<BookDetails />} />
           <Route path="favorites" element={<Favorites />} />
+          <Route path="contact-us" element={<ContactUs />} />
+          <Route path="about-us" element={<AboutUs />} />
 
             {/* Wrap protected routes with ProtectedRoute */}
             <Route element={<ProtectedRoute />}>

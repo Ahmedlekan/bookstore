@@ -12,11 +12,11 @@ const Footer = () => {
           <div>
             <h2 className="text-xl font-bold mb-4 font-display text-deepbrown">DIPLO SHOP</h2>
             <address className="not-italic text-sm space-y-4 font-body">
-              <p>1203 Town Center</p>
-              <p>Drive FL 33458 USA</p>
-              <p>+0000 123 456 789</p>
+              <p>6391 Rue Pascal</p>
+              <p>Montrel H1G1T5 Canada</p>
+              <p>+1 438 994 4503</p>
               <a href="mailto:info@example.com" className="hover:underline">
-                info@example.com
+                Ahmedlekan011@gmail.com
               </a>
             </address>
           </div>
