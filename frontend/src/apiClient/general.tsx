@@ -79,7 +79,6 @@ export const fetchCartItems = async () => {
     return data.items || []; // Return an empty array if no items are found
 };
 
-
 // for creating payment intent
 export const createPaymentIntent = async (cartItems: CartItemItemsProps[]) => {
     const response = await fetch(`${API_BASE_URL}/api/stripe/checkout`, {

@@ -10,9 +10,6 @@ const router = express.Router();
 router.post("/checkout", verifyToken, async (req: Request, res: Response) => {
     try {
         const cartItems = req.body.cartItems;
-
-        console.log(cartItems)
-
         if (!cartItems || cartItems.length === 0) {
             res.status(400).json({ error: "Cart is empty" });
             return

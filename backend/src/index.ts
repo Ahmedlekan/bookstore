@@ -8,9 +8,7 @@ import userRoutes  from "./routes/user"
 import adminRoutes from "./routes/admin"
 import generalRoutes from "./routes/general"
 import authRoutes from "./routes/auth"
-import googleAuthRoutes from "./routes/googleauth"
 import stripeRoutes from "./routes/stripe"
-
 import {v2 as cloudinary} from 'cloudinary';
 
 cloudinary.config({ 
@@ -46,7 +44,6 @@ app.use("/api/user", userRoutes)
 app.use("/api/admin", adminRoutes)
 app.use("/api/general", generalRoutes)
 app.use("/api/auth", authRoutes)
-app.use("/api/google-signin", googleAuthRoutes)
 app.use("/api/stripe", stripeRoutes)
 
 app.get("*", (req: Request, res: Response) => {
