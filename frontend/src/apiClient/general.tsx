@@ -13,23 +13,18 @@ export type SearchParams = {
 
 export const searchBooks = async (searchParams: SearchParams): Promise<BookFilterResponse> => {
     const queryParams = new URLSearchParams();
-
     if (searchParams.page) queryParams.append("page", searchParams.page);
     if (searchParams.sortOption) queryParams.append("sortOption", searchParams.sortOption);
     if (searchParams.maxPrice) queryParams.append("maxPrice", searchParams.maxPrice);
 
-    // Only add categories if the array is not empty
     if (searchParams.categories?.length) {
         searchParams.categories.forEach((category) => queryParams.append("categories", category));
     }
-
-    console.log("Query Params:", queryParams.toString()); // Debugging
 
     const response = await fetch(`${API_BASE_URL}/api/general/search?${queryParams}`);
     if (!response.ok) {
         throw new Error("Error fetching books");
     }
-
     return response.json();
 };
 
@@ -37,9 +32,7 @@ export const fetchAllBooks = async (): Promise<BookType[]>=>{
     const response = await fetch(`${API_BASE_URL}/api/general/general-books`, {
         credentials: "include",
     })
-
-    const data = await response.json();
-    return data;
+    return await response.json();
 }
 
 // add book to the cart
@@ -52,14 +45,10 @@ export const addToCart = async (bookId: string) => {
         body: JSON.stringify({bookId, quantity: 1}),
         credentials: "include"
     })
-
     if (!response.ok) {
         throw new Error("Failed to add product to cart");
       }
-    
-      const data =  await response.json();
-
-      return data
+      return  await response.json();
 }
 
 // fetch cart Items
@@ -72,11 +61,8 @@ export const fetchCartItems = async () => {
     if (!response.ok) {
         throw new Error("Failed to fetch cart items");
     }
-
     const data = await response.json();
-
-    // Ensure items are returned correctly
-    return data.items || []; // Return an empty array if no items are found
+    return data.items || [];
 };
 
 // for creating payment intent
@@ -85,13 +71,10 @@ export const createPaymentIntent = async (cartItems: CartItemItemsProps[]) => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartItems }),  // Send cart items to the backend
+        body: JSON.stringify({ cartItems }),
     });
-
     if (!response.ok) throw new Error("Error fetching payment intent");
-
     const { url } = await response.json();
-    console.log("Stripe session URL:", url); 
     return url;
 };
 
@@ -99,20 +82,14 @@ export const fetchBookById = async(bookId: string): Promise<BookType>=>{
     const response = await fetch(`${API_BASE_URL}/api/general/${bookId}`, {
         credentials: "include"
     })
-
     if (!response.ok) {
         throw new Error("Failed to fetch book");
     }
-
-    const data = await response.json();
-
-    return data;
+    return await response.json();
 }
 
 // update book quantity
 export const updateCartQuantity = async (bookId: string, quantity: number) => {
-    
-    console.log("Payload sent to updateCartQuantity:", { bookId, quantity });
 
     const response = await fetch(`${API_BASE_URL}/api/general/update-cart-quantity`, {
         method: "PATCH",
@@ -126,7 +103,6 @@ export const updateCartQuantity = async (bookId: string, quantity: number) => {
     if (!response.ok) {
         throw new Error("Failed to update cart quantity");
     }
-
     return response.json();
 };
 

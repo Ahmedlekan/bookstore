@@ -9,11 +9,9 @@ export const addBook = async(bookFormData: FormData)=>{
         method: "POST",
         body: bookFormData
     })
-
     if(!response.ok){
         throw new Error("Error adding book");
     }
-
     return response.json()
 }
 
@@ -22,30 +20,25 @@ export const allBooks = async(): Promise<BookType[]>=>{
     const response = await fetch(`${API_BASE_URL}/api/admin`, {
         credentials: "include"
     })
-
     if(!response.ok){
         console.log("Error fetchinh Products")
     }
-
     return response.json()
 }
 
-//fetch a single book and its details
+//fetch a book by Id
 export const fetchBookById = async(bookId: string): Promise<BookType>=>{
     const response = await fetch(`${API_BASE_URL}/api/admin/${bookId}`, {
         credentials: "include"
     })
-
     if(!response.ok){
         console.log("Error fetchinh Products")
     }
-
     return response.json()
 }
 
-// for updating a product
+// for updating a book
 export const updateBookById = async(bookFormData: FormData)=>{
-
     const bookId = bookFormData.get("bookId")
     if(!bookId){
         throw new Error("Book ID is required");
@@ -55,17 +48,11 @@ export const updateBookById = async(bookFormData: FormData)=>{
         body: bookFormData,
         credentials:"include"
     })
-
-    console.log("Response Status:", response.status);
-    console.log("Response Body:", await response.text());
-
     if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to update the book.");
     }
-
     return response;
-
 }
 
 //for deleting a book
@@ -74,7 +61,6 @@ export const deleteBook = async(bookId: string)=>{
         method: "DELETE",
         credentials:"include"
     })
-
     if(!response.ok){
         throw new Error("Book not deleted");
     }
